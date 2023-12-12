@@ -14,9 +14,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     private readonly HttpClient _client;
     private readonly WebApplicationFactory<Program> _factory;
     private readonly IMapper _mapper;
-
-    //todo: context für jeden Test
-
+    
     public IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory)
     {
         _factory = factory;

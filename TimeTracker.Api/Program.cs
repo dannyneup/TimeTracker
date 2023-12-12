@@ -37,6 +37,3 @@ namespace TimeTracker.Api
     public abstract partial class Program(){
     }
 }
-
-
-// todo: Read- und WriteViewModels
