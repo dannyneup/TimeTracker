@@ -1,36 +1,52 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
+using TimeTracker.Api.Employee.ViewModels;
 
 namespace TimeTracker.Api.Employee;
 
 [ApiController]
 [Route("/employees")]
-public class EmployeeController(TimeTrackerContext context) : ControllerBase
+public class EmployeeController : ControllerBase
 {
-    [HttpPost]
-    public async Task<ActionResult> Create(Employee employee)
+    private readonly TimeTrackerContext _context;
+    private readonly IMapper _mapper;
+
+    public EmployeeController(TimeTrackerContext context, IMapper mapper)
     {
-        context.Add(employee);
+        _context = context;
+        _mapper = mapper;
+    }
     
-        await context.SaveChangesAsync();
+    [HttpPost]
+    public async Task<ActionResult> Create(EmployeeWriteViewModel employeeWriteViewModel)
+    {
+        var employee = _mapper.Map<Employee>(employeeWriteViewModel);
+        
+        var employeeEntry = _context.Add(employee);
+        await _context.SaveChangesAsync();
+
+        var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employeeEntry.Entity);
     
-        return CreatedAtAction("GetById", new { id = employee.Id}, employee);
+        return CreatedAtAction("GetById", new { id = employeeEntry.Entity.Id}, employeeReadViewModel);
     }
     
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
-        var employees = await context.Employees
+        var employees = await _context.Employees
             .ToListAsync();
+
+        var employeeReadViewModels = _mapper.Map<List<EmployeeReadViewModel>>(employees);
     
-        return Ok(employees);
+        return Ok(employeeReadViewModels);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
-        var employee = await context.Employees.FindAsync(id);
+        var employee = await _context.Employees.FindAsync(id);
 
         return employee != null
             ? Ok(employee)
@@ -38,14 +54,12 @@ public class EmployeeController(TimeTrackerContext context) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Edit(int id, Employee inputEmployee)
+    public async Task<ActionResult> Edit(int id, EmployeeWriteViewModel inputEmployeeWriteViewModel)
     {
-        if (id != inputEmployee.Id) return BadRequest();
-
         if (!await EntityExists(id)) return NotFound();
         
-        context.Entry(inputEmployee).State = EntityState.Modified;
-        await context.SaveChangesAsync();
+        _context.Entry(inputEmployeeWriteViewModel).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
@@ -53,18 +67,18 @@ public class EmployeeController(TimeTrackerContext context) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var employee = await context.Employees.FindAsync(id);
+        var employee = await _context.Employees.FindAsync(id);
 
         if (employee is null) return NotFound();
-        context.Employees.Remove(employee);
+        _context.Employees.Remove(employee);
 
-        await context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
     
     private Task<bool> EntityExists(int id)
     {
-        return context.Employees.AnyAsync(e => e.Id == id);
+        return _context.Employees.AnyAsync(e => e.Id == id);
     }
 }

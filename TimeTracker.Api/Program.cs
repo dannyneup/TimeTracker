@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
 
@@ -10,13 +9,12 @@ builder.Services
     .AddDbContext<TimeTrackerContext>(options => options
         .UseSqlite(configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
