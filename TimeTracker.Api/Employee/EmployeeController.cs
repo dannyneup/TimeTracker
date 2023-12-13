@@ -29,7 +29,7 @@ public class EmployeeController : ControllerBase
 
         var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employeeEntry.Entity);
     
-        return CreatedAtAction("GetById", new { id = employeeEntry.Entity.Id}, employeeReadViewModel);
+        return CreatedAtAction("GetById", new { id = employeeReadViewModel.Id}, employeeReadViewModel);
     }
     
     [HttpGet]
