@@ -3,14 +3,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace TimeTracker.Api.Context;
 
-public sealed class TimeTrackerContext : DbContext
+public sealed class TimeTrackerContext(DbContextOptions<TimeTrackerContext> options) : DbContext(options)
 {
     public DbSet<Employee.Employee> Employees { get; set; } = null!;
     public DbSet<Project.Project> Projects { get; set; } = null!;
-
-    public TimeTrackerContext(DbContextOptions<TimeTrackerContext> options): base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
