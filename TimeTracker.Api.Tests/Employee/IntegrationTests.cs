@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Employee.ViewModels;
 
 namespace TimeTracker.Api.Tests.Employee;
@@ -11,19 +12,12 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     private readonly HttpClient _client;
     private readonly TimeTrackerWebApplicationFactory<Program> _factory;
     private readonly IMapper _mapper;
-    
+
     public IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = factory.CreateClient();
-        
-        var mapperConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.CreateMap<Api.Employee.Employee, EmployeeWriteViewModel>();
-            cfg.CreateMap<EmployeeReadViewModel, Api.Employee.Employee>();
-        });
-        
-        _mapper = mapperConfig.CreateMapper();
+        _mapper = factory.Services.GetRequiredService<IMapper>();
     }
 
     [Fact]
