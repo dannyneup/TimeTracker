@@ -2,9 +2,6 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Api.Context;
 using TimeTracker.Api.Employee.ViewModels;
 
 namespace TimeTracker.Api.Tests.Employee;
@@ -12,7 +9,7 @@ namespace TimeTracker.Api.Tests.Employee;
 public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly TimeTrackerWebApplicationFactory<Program> _factory;
     private readonly IMapper _mapper;
     
     public IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory)
@@ -56,8 +53,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     [Fact]
     public async Task GetEmployeeById()
     {
-        var context = CreateNewBdContext();
-        var insertedEmployee = await InsertTestEmployee(context);
+        var insertedEmployee = await InsertTestEmployee();
 
         var response = await _client.GetAsync($"employees/{insertedEmployee.Id}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -71,13 +67,12 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     [Fact]
     public async Task DeleteExistingEmployee()
     {
-        using var scope = _factory.Server.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<TimeTrackerContext>();
-        var insertedEmployee = await InsertTestEmployee(context);
+        var insertedEmployee = await InsertTestEmployee();
 
         var response = await _client.DeleteAsync($"employees/{insertedEmployee.Id}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
+        await using var context = _factory.CreateDbContext();
         Assert.NotNull(context.Employees);
  
         var foundEmployee = await context.Employees.FindAsync(insertedEmployee.Id);
@@ -86,8 +81,10 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
         Assert.True(employeeRemoved);
     }
 
-    private async Task<Api.Employee.Employee> InsertTestEmployee(TimeTrackerContext context)
+    private async Task<Api.Employee.Employee> InsertTestEmployee()
     {
+        await using var context = _factory.CreateDbContext();
+        
         var employee = new Api.Employee.Employee()
         {
             Id = 0,
@@ -101,14 +98,6 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
         return employee;
     }
 
-    private TimeTrackerContext CreateNewBdContext()
-    {
-        using var scope = _factory.Server.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<TimeTrackerContext>();
-
-        return context;
-    }
-    
     private bool EqualsIgnoringId<T>(T obj1, T obj2)
     {
         return typeof(T)
