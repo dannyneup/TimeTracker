@@ -57,8 +57,15 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult> Edit(int id, EmployeeWriteViewModel inputEmployeeWriteViewModel)
     {
         if (!await EntityExists(id)) return NotFound();
+
+        var employee = new Employee()
+        {
+            Id = id,
+            LastName = inputEmployeeWriteViewModel.LastName,
+            FirstName = inputEmployeeWriteViewModel.FirstName
+        };
         
-        _context.Entry(inputEmployeeWriteViewModel).State = EntityState.Modified;
+        _context.Entry(employee).State = EntityState.Modified;
         await _context.SaveChangesAsync();
 
         return NoContent();

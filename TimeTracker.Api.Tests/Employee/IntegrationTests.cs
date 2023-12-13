@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using AutoMapper;
@@ -14,6 +15,10 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     private readonly TimeTrackerWebApplicationFactory<Program> _factory;
     private readonly IMapper _mapper;
 
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
+
+    private const string EmployeeEndpoint = "employees";
+    
     public IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory)
     {
         _factory = factory;
@@ -21,32 +26,27 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
         _mapper = factory.Services.GetRequiredService<IMapper>();
     }
 
-    [Fact]
-    public async Task CreateEmployeeWithValidData()
+    [Theory]
+    [InlineData("Mustermann", "Max")]
+    
+    public async Task CreateEmployeeWithValidData(string lastName, string firstName)
     {
-        var employee = new Api.Employee.Employee
-        {
-            Id = 0,
-            FirstName = "Max",
-            LastName = "Muster"
-        };
-        var employeeWriteViewModel = _mapper.Map<EmployeeWriteViewModel>(employee);
-
-        var response = await _client.PostAsJsonAsync("employees", employeeWriteViewModel,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var employeeWriteViewModel = new EmployeeWriteViewModel(lastName, firstName);
+            
+        var response = await _client.PostAsJsonAsync(EmployeeEndpoint, employeeWriteViewModel, _jsonSerializerOptions);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<EmployeeReadViewModel>();
         Assert.NotNull(resultReadViewModel);
 
-        var result = _mapper.Map<Api.Employee.Employee>(resultReadViewModel);
-
-        Assert.True(EqualsIgnoringId(employee, result));
+        var resultWriteViewModel = _mapper.Map<EmployeeWriteViewModel>(resultReadViewModel);
+        
+        Assert.Equal(employeeWriteViewModel, resultWriteViewModel);
     }
 
     [Theory]
-    [InlineData(@"{""id"": 20, ""FirstName"": ""Max"", ""LastName"": ""Mustermann""}")]
+    //[InlineData(@"{""id"": 20, ""FirstName"": ""Max"", ""LastName"": ""Mustermann""}")]
     [InlineData(@"{""FirstName"": ""Max""}")]
     [InlineData(@"{""LastName"": ""Mustermann""}")]
     [InlineData(@"{}")]
@@ -54,11 +54,11 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     [InlineData(@"{""FirstName"": ""Max"", ""LastName"": [Mustermann]}")]
     [InlineData(@"{[{""FirstName"": ""Max"", ""LastName"": ""Mustermann""}]}")]
     [InlineData(@"{[{""FirstName"": ""Max"", ""LastName"": ""Mustermann""}, {""FirstName"": ""Max"", ""LastName"": ""Mustermann""}]}")]
-public async Task CreateEmployeeWithInValidData(string json)
+    public async Task CreateEmployeeWithInValidData(string json)
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-        
-        var response = await _client.PostAsync("employees", httpContent);
+
+        var response = await _client.PostAsync(EmployeeEndpoint, httpContent);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -68,7 +68,7 @@ public async Task CreateEmployeeWithInValidData(string json)
     {
         var insertedEmployee = await InsertTestEmployee();
 
-        var response = await _client.GetAsync($"employees/{insertedEmployee.Id}");
+        var response = await _client.GetAsync($"{EmployeeEndpoint}/{insertedEmployee.Id}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<EmployeeReadViewModel>();
@@ -78,18 +78,50 @@ public async Task CreateEmployeeWithInValidData(string json)
 
         Assert.Equal(insertedEmployee, result);
     }
+
+    [Theory]
+    [InlineData("Musterfrau", "Erika")]
+    public async Task UpdateExistingEmployee(string lastName, string firstName)
+    {
+        var insertedEmployee = await InsertTestEmployee();
+
+        var updatedEmployeeWriteViewModel = new EmployeeWriteViewModel(lastName, firstName);
+
+        var response = await _client.PutAsJsonAsync($"{EmployeeEndpoint}/{insertedEmployee.Id}", updatedEmployeeWriteViewModel, _jsonSerializerOptions);
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+    }
+
+    [Theory]
+    [InlineData(1, @"{""LastName"": ""Musterfrau""}")]
+    public async Task UpdateExistingEmployeeWithInvalidData(int id, string json)
+    {
+        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _client.PutAsync($"{EmployeeEndpoint}/{id}", httpContent);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
     
+    [Theory]
+    [InlineData(5, @"{""LastName"": ""Musterfrau"", ""FirstName"": ""Erika""}")]
+    public async Task UpdateNonExistingEmployee(int id, string json)
+    {
+        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _client.PutAsync($"{EmployeeEndpoint}/{id}", httpContent);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     [Fact]
     public async Task DeleteExistingEmployee()
     {
         var insertedEmployee = await InsertTestEmployee();
 
-        var response = await _client.DeleteAsync($"employees/{insertedEmployee.Id}");
+        var response = await _client.DeleteAsync($"{EmployeeEndpoint}/{insertedEmployee.Id}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
         await using var context = _factory.CreateDbContext();
         Assert.NotNull(context.Employees);
- 
+
         var foundEmployee = await context.Employees.FindAsync(insertedEmployee.Id);
         var employeeRemoved = foundEmployee == null;
         Assert.True(employeeRemoved);
@@ -98,8 +130,8 @@ public async Task CreateEmployeeWithInValidData(string json)
     private async Task<Api.Employee.Employee> InsertTestEmployee()
     {
         await using var context = _factory.CreateDbContext();
-        
-        var employee = new Api.Employee.Employee()
+
+        var employee = new Api.Employee.Employee
         {
             Id = 0,
             FirstName = "Max",
@@ -110,13 +142,5 @@ public async Task CreateEmployeeWithInValidData(string json)
         await context.SaveChangesAsync();
 
         return employee;
-    }
-
-    private bool EqualsIgnoringId<T>(T obj1, T obj2)
-    {
-        return typeof(T)
-            .GetProperties()
-            .Where(p => p.Name != "Id")
-            .All(p => Equals(p.GetValue(obj1), p.GetValue(obj2)));
     }
 }

@@ -11,5 +11,6 @@ public class EmployeeMappingProfile : Profile
         CreateMap<Employee, EmployeeWriteViewModel>();
         CreateMap<EmployeeReadViewModel, Employee>();
         CreateMap<EmployeeWriteViewModel, Employee>();
+        CreateMap<EmployeeReadViewModel, EmployeeWriteViewModel>();
     }
 }
