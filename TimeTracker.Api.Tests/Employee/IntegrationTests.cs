@@ -58,10 +58,12 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
         var response = await _client.GetAsync($"employees/{insertedEmployee.Id}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var result = await response.Content.ReadFromJsonAsync<Api.Employee.Employee>();
-        Assert.NotNull(result);
+        var resultReadViewModel = await response.Content.ReadFromJsonAsync<EmployeeReadViewModel>();
+        Assert.NotNull(resultReadViewModel);
 
-        Assert.True(EqualsIgnoringId(insertedEmployee, result));
+        var result = _mapper.Map<Api.Employee.Employee>(resultReadViewModel);
+
+        Assert.Equal(insertedEmployee, result);
     }
     
     [Fact]
@@ -77,7 +79,6 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
  
         var foundEmployee = await context.Employees.FindAsync(insertedEmployee.Id);
         var employeeRemoved = foundEmployee == null;
-        
         Assert.True(employeeRemoved);
     }
 

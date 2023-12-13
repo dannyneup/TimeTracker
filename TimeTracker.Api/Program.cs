@@ -34,6 +34,5 @@ app.Run();
 
 namespace TimeTracker.Api
 {
-    public abstract partial class Program(){
-    }
+    public abstract class Program;
 }

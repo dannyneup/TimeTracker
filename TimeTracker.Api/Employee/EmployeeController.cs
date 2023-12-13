@@ -21,8 +21,6 @@ public class EmployeeController(TimeTrackerContext context) : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
-        if (context.Employees is null) return Ok(Enumerable.Empty<Employee>());
-        
         var employees = await context.Employees
             .ToListAsync();
     
@@ -32,8 +30,6 @@ public class EmployeeController(TimeTrackerContext context) : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
-        if (context.Employees is null) return Ok(Enumerable.Empty<Employee>());
-
         var employee = await context.Employees.FindAsync(id);
 
         return employee != null
@@ -69,8 +65,6 @@ public class EmployeeController(TimeTrackerContext context) : ControllerBase
     
     private Task<bool> EntityExists(int id)
     {
-        return context.Employees != null 
-            ? context.Employees.AnyAsync(e => e.Id == id)
-            : Task.FromResult(false);
+        return context.Employees.AnyAsync(e => e.Id == id);
     }
 }
