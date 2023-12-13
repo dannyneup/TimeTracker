@@ -10,7 +10,6 @@ public sealed class TimeTrackerContext : DbContext
 
     public TimeTrackerContext(DbContextOptions<TimeTrackerContext> options): base(options)
     {
-        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

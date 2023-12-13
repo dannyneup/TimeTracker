@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using TimeTracker.Api.Context;
 
 namespace TimeTracker.Api.Tests;
@@ -19,10 +20,13 @@ public class TimeTrackerWebApplicationFactory<TProgram>
         
         builder.ConfigureServices(services =>
         {
-            
+            services.RemoveAll(typeof(DbContextOptions<TimeTrackerContext>));
             services.AddDbContext<TimeTrackerContext>(
                 options => options.UseSqlite(_sqLiteConnection));
         });
+
+        using var context = CreateDbContext();
+        context.Database.EnsureCreated();
 
         builder.UseEnvironment("Development");
     }
