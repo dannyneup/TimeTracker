@@ -11,37 +11,28 @@ namespace TimeTracker.Api.Tests;
 public class TimeTrackerWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
+    private readonly SqliteConnection _sqLiteConnection = new("Data Source=:memory:");
+    
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        _sqLiteConnection.Open();
+        
         builder.ConfigureServices(services =>
         {
-            var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbContextOptions<TimeTrackerContext>));
-
-            services.Remove(dbContextDescriptor);
-
-            var dbConnectionDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbConnection));
-
-            services.Remove(dbConnectionDescriptor);
-
-            services.AddSingleton<DbConnection>(container =>
-            {
-                var connection = new SqliteConnection("DataSource=:memory:");
-                connection.Open();
-
-                return connection;
-            });
-
-            services.AddDbContext<TimeTrackerContext>((container, options) =>
-            {
-                var connection = container.GetRequiredService<DbConnection>();
-                options.UseSqlite(connection);
-            });
+            
+            services.AddDbContext<TimeTrackerContext>(
+                options => options.UseSqlite(_sqLiteConnection));
         });
 
         builder.UseEnvironment("Development");
+    }
+
+    public TimeTrackerContext CreateDbContext()
+    {
+        var options = new DbContextOptionsBuilder<TimeTrackerContext>()
+            .UseSqlite(_sqLiteConnection)
+            .Options;
+
+        return new TimeTrackerContext(options);
     }
 }
