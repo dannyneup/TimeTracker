@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +43,24 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
         var result = _mapper.Map<Api.Employee.Employee>(resultReadViewModel);
 
         Assert.True(EqualsIgnoringId(employee, result));
+    }
+
+    [Theory]
+    [InlineData(@"{""id"": 20, ""FirstName"": ""Max"", ""LastName"": ""Mustermann""}")]
+    [InlineData(@"{""FirstName"": ""Max""}")]
+    [InlineData(@"{""LastName"": ""Mustermann""}")]
+    [InlineData(@"{}")]
+    [InlineData(@"{""FirstName"": 3, ""LastName"": ""Mustermann""}")]
+    [InlineData(@"{""FirstName"": ""Max"", ""LastName"": [Mustermann]}")]
+    [InlineData(@"{[{""FirstName"": ""Max"", ""LastName"": ""Mustermann""}]}")]
+    [InlineData(@"{[{""FirstName"": ""Max"", ""LastName"": ""Mustermann""}, {""FirstName"": ""Max"", ""LastName"": ""Mustermann""}]}")]
+public async Task CreateEmployeeWithInValidData(string json)
+    {
+        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+        
+        var response = await _client.PostAsync("employees", httpContent);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
