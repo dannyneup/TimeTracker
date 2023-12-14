@@ -48,8 +48,10 @@ public class EmployeeController : ControllerBase
     {
         var employee = await _context.Employees.FindAsync(id);
 
-        return employee != null
-            ? Ok(employee)
+        var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employee);
+        
+        return employeeReadViewModel != null
+            ? Ok(employeeReadViewModel)
             : NotFound();
     }
 
