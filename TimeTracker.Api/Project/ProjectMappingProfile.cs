@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using AutoMapper;
+﻿using AutoMapper;
 using TimeTracker.Api.Project.ViewModels;
 
 namespace TimeTracker.Api.Project;
