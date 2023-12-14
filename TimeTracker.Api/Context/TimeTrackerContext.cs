@@ -5,8 +5,8 @@ namespace TimeTracker.Api.Context;
 
 public sealed class TimeTrackerContext(DbContextOptions<TimeTrackerContext> options) : DbContext(options)
 {
-    public DbSet<Employee.Employee> Employees { get; set; } = null!;
-    public DbSet<Project.Project> Projects { get; set; } = null!;
+    public DbSet<Employee.Employee> Employees { get; init; } = null!;
+    public DbSet<Project.Project> Projects { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
