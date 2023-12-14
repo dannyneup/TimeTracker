@@ -45,7 +45,6 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     }
 
     [Theory]
-    //[InlineData(@"{""id"": 20, ""FirstName"": ""Max"", ""LastName"": ""Mustermann""}")]
     [InlineData(@"{""FirstName"": ""Max""}")]
     [InlineData(@"{""LastName"": ""Mustermann""}")]
     [InlineData(@"{}")]
