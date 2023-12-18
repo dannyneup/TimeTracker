@@ -7,7 +7,7 @@ namespace TimeTracker.Api.Booking;
 public class Booking : IEquatable<Booking>
 {
     [Key]
-    public required int Id { get; init; }
+    public required int Id { get; set; }
     [Required]
     [ForeignKey("Employee")]
     public required int EmployeeId { get; set; }
