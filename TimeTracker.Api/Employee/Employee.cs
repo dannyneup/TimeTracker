@@ -6,7 +6,7 @@ namespace TimeTracker.Api.Employee;
 public class Employee : IEquatable<Employee>
 {
     [Key]
-    public int Id { get; init; }
+    public int Id { get; set; }
 
     [Required] 
     public string LastName { get; set; } = null!;
@@ -14,11 +14,14 @@ public class Employee : IEquatable<Employee>
     [Required] 
     public string FirstName { get; set; } = null!;
 
+    [Required] 
+    public string EmailAddress { get; set; } = null!;
+
     public bool Equals(Employee? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Id == other.Id && LastName == other.LastName && FirstName == other.FirstName;
+        return Id == other.Id && LastName == other.LastName && FirstName == other.FirstName && EmailAddress == other.EmailAddress;
     }
 
     public override bool Equals(object? obj)
@@ -31,6 +34,6 @@ public class Employee : IEquatable<Employee>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, LastName, FirstName);
+        return HashCode.Combine(Id, LastName, FirstName, EmailAddress);
     }
 }

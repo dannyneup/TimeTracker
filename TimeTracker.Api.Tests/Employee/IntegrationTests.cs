@@ -26,11 +26,11 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     }
 
     [Theory]
-    [InlineData("Mustermann", "Max")]
+    [InlineData("Mustermann", "Max", "max@mustermann.de")]
     
-    public async Task CreateEmployeeWithValidData(string lastName, string firstName)
+    public async Task CreateEmployeeWithValidData(string lastName, string firstName, string emailAddress)
     {
-        var employeeWriteViewModel = new EmployeeWriteViewModel(lastName, firstName);
+        var employeeWriteViewModel = new EmployeeWriteViewModel(lastName, firstName, emailAddress);
             
         var response = await _client.PostAsJsonAsync(EmployeeEndpoint, employeeWriteViewModel, _jsonSerializerOptions);
 
@@ -52,6 +52,8 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     [InlineData(@"{""FirstName"": ""Max"", ""LastName"": [Mustermann]}")]
     [InlineData(@"{[{""FirstName"": ""Max"", ""LastName"": ""Mustermann""}]}")]
     [InlineData(@"{[{""FirstName"": ""Max"", ""LastName"": ""Mustermann""}, {""FirstName"": ""Max"", ""LastName"": ""Mustermann""}]}")]
+    [InlineData(@"{""FirstName"": ""Max"", ""LastName"": ""Mustermann"", ""EmailAdress"": ""Maxmustermann.de""}")]
+    [InlineData(@"{""FirstName"": ""Max"", ""LastName"": ""Mustermann"", ""EmailAdress"": ""Max@mustermann""}")]
     public async Task CreateEmployeeWithInValidData(string json)
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -78,21 +80,23 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     }
 
     [Theory]
-    [InlineData("Musterfrau", "Erika")]
-    public async Task UpdateExistingEmployee(string lastName, string firstName)
+    [InlineData("Musterfrau", "Erika", "erika@musterfrau.de")]
+    public async Task UpdateExistingEmployee(string lastName, string firstName, string emailAddress)
     {
         var insertedEmployee = await InsertTestEmployee();
 
-        var updatedEmployeeWriteViewModel = new EmployeeWriteViewModel(lastName, firstName);
+        var updatedEmployeeWriteViewModel = new EmployeeWriteViewModel(lastName, firstName, emailAddress);
 
         var response = await _client.PutAsJsonAsync($"{EmployeeEndpoint}/{insertedEmployee.Id}", updatedEmployeeWriteViewModel, _jsonSerializerOptions);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
     [Theory]
-    [InlineData(1, @"{""LastName"": ""Musterfrau""}")]
+    [InlineData(2, @"{""LastName"": ""Musterfrau""}")]
+    [InlineData(1, @"{""LastName"": ""Musterfrau"", ""FirstName"": ""Erika"", ""EmailAddress"": ""erikamusterfrau.de""}")]
     public async Task UpdateExistingEmployeeWithInvalidData(int id, string json)
     {
+        await InsertTestEmployee();
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await _client.PutAsync($"{EmployeeEndpoint}/{id}", httpContent);
@@ -100,7 +104,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     }
     
     [Theory]
-    [InlineData(5, @"{""LastName"": ""Musterfrau"", ""FirstName"": ""Erika""}")]
+    [InlineData(5, @"{""LastName"": ""Musterfrau"", ""FirstName"": ""Erika"", ""EmailAddress"": ""erika@musterfrau.de""}")]
     public async Task UpdateNonExistingEmployee(int id, string json)
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -133,7 +137,8 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
         {
             Id = 0,
             FirstName = "Max",
-            LastName = "Musterman"
+            LastName = "Musterman",
+            EmailAddress = "max@mustermann.de"
         };
 
         context.Employees.Add(employee);

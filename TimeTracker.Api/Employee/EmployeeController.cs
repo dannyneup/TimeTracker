@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
 using TimeTracker.Api.Employee.ViewModels;
+using TimeTracker.Api.Services;
 
 namespace TimeTracker.Api.Employee;
 
@@ -59,13 +60,11 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult> Edit(int id, EmployeeWriteViewModel inputEmployeeWriteViewModel)
     {
         if (!await EntityExists(id)) return NotFound();
+        if (!EmailValidationService.IsValidEmail(inputEmployeeWriteViewModel.EmailAddress))
+            return BadRequest("invalid Email-Address");
 
-        var employee = new Employee()
-        {
-            Id = id,
-            LastName = inputEmployeeWriteViewModel.LastName,
-            FirstName = inputEmployeeWriteViewModel.FirstName
-        };
+        var employee = _mapper.Map<Employee>(inputEmployeeWriteViewModel);
+        employee.Id = id;
         
         _context.Entry(employee).State = EntityState.Modified;
         await _context.SaveChangesAsync();
