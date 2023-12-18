@@ -25,7 +25,7 @@ public class EmployeeController : ControllerBase
     {
         var employee = _mapper.Map<Employee>(employeeWriteViewModel);
         
-        var employeeEntry = _context.Add(employee);
+        var employeeEntry = await _context.AddAsync(employee);
         await _context.SaveChangesAsync();
 
         var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employeeEntry.Entity);

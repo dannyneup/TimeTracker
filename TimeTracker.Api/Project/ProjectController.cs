@@ -23,7 +23,7 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult> Create(ProjectWriteViewModel projectWriteViewModel)
     {
         var project = _mapper.Map<Project>(projectWriteViewModel);
-        var projectEntity = _context.Projects.Add(project);
+        var projectEntity = await _context.Projects.AddAsync(project);
         await _context.SaveChangesAsync();
 
         var projectReadViewModel = _mapper.Map<ProjectReadViewModel>(projectEntity.Entity);

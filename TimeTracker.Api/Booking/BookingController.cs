@@ -24,7 +24,7 @@ public class BookingController : ControllerBase
     {
         var booking = _mapper.Map<Booking>(bookingWriteViewModel);
         
-        var bookingEntry = _context.Add(booking);
+        var bookingEntry = await _context.AddAsync(booking);
         await _context.SaveChangesAsync();
 
         var bookingReadViewModel = _mapper.Map<BookingReadViewModel>(bookingEntry.Entity);
@@ -61,6 +61,7 @@ public class BookingController : ControllerBase
         if (!await EntityExists(id)) return NotFound();
 
         var booking = _mapper.Map<Booking>(inputBookingWriteViewModel);
+        booking.Id = id;
         
         _context.Entry(booking).State = EntityState.Modified;
         await _context.SaveChangesAsync();
