@@ -7,7 +7,7 @@ using TimeTracker.Api.Booking.ViewModels;
 
 namespace TimeTracker.Api.Tests.Booking;
 
-[Collection("sequential")]
+
 public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<Program>>
 {
     private const string BookingEndpoint = "bookings";
