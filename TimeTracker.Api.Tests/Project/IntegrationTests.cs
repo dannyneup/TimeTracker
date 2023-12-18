@@ -1,29 +1,13 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
-using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Project.ViewModels;
 
 namespace TimeTracker.Api.Tests.Project;
 
-public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<Program>>
+public class IntegrationsTestses(TimeTrackerWebApplicationFactory<Program> factory) : BaseIntegrationTests(factory)
 {
-    private readonly HttpClient _client;
-    private readonly TimeTrackerWebApplicationFactory<Program> _factory;
-    private readonly IMapper _mapper;
-
-    private readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
-
     private const string ProjectEndpoint = "projects";
-    
-    public IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-        _client = factory.CreateClient();
-        _mapper = factory.Services.GetRequiredService<IMapper>();
-    }
 
     [Theory]
     [InlineData("Project-Name", "My Customer")]
@@ -32,14 +16,14 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     {
         var projectWriteViewModel = new ProjectWriteViewModel(name, customer);
             
-        var response = await _client.PostAsJsonAsync(ProjectEndpoint, projectWriteViewModel, _jsonSerializerOptions);
+        var response = await Client.PostAsJsonAsync(ProjectEndpoint, projectWriteViewModel, JsonSerializerOptions);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<ProjectReadViewModel>();
         Assert.NotNull(resultReadViewModel);
 
-        var resultWriteViewModel = _mapper.Map<ProjectWriteViewModel>(resultReadViewModel);
+        var resultWriteViewModel = Mapper.Map<ProjectWriteViewModel>(resultReadViewModel);
         
         Assert.Equal(projectWriteViewModel, resultWriteViewModel);
     }
@@ -53,7 +37,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _client.PostAsync(ProjectEndpoint, httpContent);
+        var response = await Client.PostAsync(ProjectEndpoint, httpContent);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -63,13 +47,13 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     {
         var insertedProject = await InsertTestProject();
 
-        var response = await _client.GetAsync($"{ProjectEndpoint}/{insertedProject.Id}");
+        var response = await Client.GetAsync($"{ProjectEndpoint}/{insertedProject.Id}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<ProjectReadViewModel>();
         Assert.NotNull(resultReadViewModel);
 
-        var result = _mapper.Map<TimeTracker.Api.Project.Project>(resultReadViewModel);
+        var result = Mapper.Map<TimeTracker.Api.Project.Project>(resultReadViewModel);
 
         Assert.Equal(insertedProject, result);
     }
@@ -82,7 +66,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
 
         var updatedProjectWriteViewModel = new ProjectWriteViewModel(name, customer);
 
-        var response = await _client.PutAsJsonAsync($"{ProjectEndpoint}/{insertedProject.Id}", updatedProjectWriteViewModel, _jsonSerializerOptions);
+        var response = await Client.PutAsJsonAsync($"{ProjectEndpoint}/{insertedProject.Id}", updatedProjectWriteViewModel, JsonSerializerOptions);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -92,7 +76,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _client.PutAsync($"{ProjectEndpoint}/{id}", httpContent);
+        var response = await Client.PutAsync($"{ProjectEndpoint}/{id}", httpContent);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
     
@@ -102,7 +86,7 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _client.PutAsync($"{ProjectEndpoint}/{id}", httpContent);
+        var response = await Client.PutAsync($"{ProjectEndpoint}/{id}", httpContent);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -111,31 +95,14 @@ public class IntegrationsTests : IClassFixture<TimeTrackerWebApplicationFactory<
     {
         var insertedProject = await InsertTestProject();
 
-        var response = await _client.DeleteAsync($"{ProjectEndpoint}/{insertedProject.Id}");
+        var response = await Client.DeleteAsync($"{ProjectEndpoint}/{insertedProject.Id}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-        await using var context = _factory.CreateDbContext();
+        await using var context = Factory.CreateDbContext();
         Assert.NotNull(context.Projects);
 
         var foundProject = await context.Projects.FindAsync(insertedProject.Id);
         var projectRemoved = foundProject == null;
         Assert.True(projectRemoved);
-    }
-
-    private async Task<global::TimeTracker.Api.Project.Project> InsertTestProject()
-    {
-        await using var context = _factory.CreateDbContext();
-
-        var project = new global::TimeTracker.Api.Project.Project
-        {
-            Id = 0,
-            Name = "Dummy-Name",
-            Customer = "Dummy-Customer"
-        };
-
-        context.Projects.Add(project);
-        await context.SaveChangesAsync();
-
-        return project;
     }
 }
