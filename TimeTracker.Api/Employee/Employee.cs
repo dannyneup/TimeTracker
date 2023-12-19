@@ -17,6 +17,8 @@ public class Employee : IEquatable<Employee>
     [Required] 
     public string EmailAddress { get; set; } = null!;
 
+    public List<Project.Project> Projects { get; set; } = [];
+
     public bool Equals(Employee? other)
     {
         if (ReferenceEquals(null, other)) return false;

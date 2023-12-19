@@ -84,6 +84,17 @@ public class EmployeeController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("{id}/projects")]
+    public async Task<ActionResult> GetEmployeesProjects(int id)
+    {
+        if (!await EntityExists(id)) return NotFound();
+
+        var employee = await _context.Employees.Include(e => e.Projects).SingleOrDefaultAsync(x => x.Id == id);
+        var projects = employee!.Projects;
+        
+        return Ok(projects);
+    }
     
     private Task<bool> EntityExists(int id)
     {
