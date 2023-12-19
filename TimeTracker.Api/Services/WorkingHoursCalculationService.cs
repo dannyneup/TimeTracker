@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using System.Xml;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
 
 namespace TimeTracker.Api.Services;
@@ -8,7 +6,7 @@ namespace TimeTracker.Api.Services;
 public class WorkingHoursCalculationService
 {
     private readonly TimeTrackerContext _context;
-    private const int WeeklyPlannedHours = 40;
+    private const int DailyPlannedHours = 8;
 
     public WorkingHoursCalculationService(TimeTrackerContext context)
     {
@@ -24,5 +22,15 @@ public class WorkingHoursCalculationService
         var totalWorkingHours = TimeSpan.FromMinutes(totalWorkingMinutes);
 
         return totalWorkingHours;
+    }
+
+    public async Task<TimeSpan> GetEmployeeWorkingHoursDeviation(int employeeId, DateTimeOffset start, DateTimeOffset end)
+    {
+        var totalWorkingHours = await GetEmployeeWorkingHours(employeeId, start, end);
+        var timespan = end - start;
+        var timespanDays = timespan.Days + 1;
+        var plannedHours = timespanDays * DailyPlannedHours;
+        var deviation = totalWorkingHours - TimeSpan.FromHours(plannedHours);
+        return deviation;
     }
 }

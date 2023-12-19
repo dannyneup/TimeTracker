@@ -110,6 +110,18 @@ public class EmployeeController : ControllerBase
         return Ok(workingHours);
     }
     
+    [HttpGet("{id}/workinghoursdeviation")]
+    public async Task<ActionResult> GetEmployeesWorkingHoursDeviation(int id, [FromQuery] DateTimeOffset? timespanStart, DateTimeOffset? timespanEnd)
+    {
+        if (timespanEnd == null || timespanStart == null)
+            return BadRequest("timespanStart and timespanEnd are required");
+
+        if (timespanEnd < timespanStart) return BadRequest("timestampStart must be before timestampEnd");
+
+        var workingHoursDeviation =await _workingHoursCalculationService.GetEmployeeWorkingHoursDeviation(id, (DateTimeOffset)timespanStart, (DateTimeOffset)timespanEnd);
+        return Ok(workingHoursDeviation);
+    }
+    
     private Task<bool> EntityExists(int id)
     {
         return _context.Employees.AnyAsync(e => e.Id == id);
