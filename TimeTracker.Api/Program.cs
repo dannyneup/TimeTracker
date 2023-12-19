@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
+using TimeTracker.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<EmailValidationService>();
 
 var app = builder.Build();
 

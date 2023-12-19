@@ -13,11 +13,13 @@ public class EmployeeController : ControllerBase
 {
     private readonly TimeTrackerContext _context;
     private readonly IMapper _mapper;
+    private readonly EmailValidationService _emailValidationService;
 
-    public EmployeeController(TimeTrackerContext context, IMapper mapper)
+    public EmployeeController(TimeTrackerContext context, IMapper mapper, EmailValidationService emailValidationService)
     {
         _context = context;
         _mapper = mapper;
+        _emailValidationService = emailValidationService;
     }
     
     [HttpPost]
@@ -60,7 +62,7 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult> Edit(int id, EmployeeWriteViewModel inputEmployeeWriteViewModel)
     {
         if (!await EntityExists(id)) return NotFound();
-        if (!EmailValidationService.IsValidEmail(inputEmployeeWriteViewModel.EmailAddress))
+        if (!_emailValidationService.IsValidEmail(inputEmployeeWriteViewModel.EmailAddress))
             return BadRequest("invalid Email-Address");
 
         var employee = _mapper.Map<Employee>(inputEmployeeWriteViewModel);
