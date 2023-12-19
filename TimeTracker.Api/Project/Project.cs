@@ -13,7 +13,7 @@ public class Project : IEquatable<Project>
     public string Name { get; set; } = null!;
     [Required] 
     public string Customer { get; set; } = null!;
-
+    
     public ICollection<Employee.Employee> Employees { get; set; } = new List<Employee.Employee>();
 
     public bool Equals(Project? other)
