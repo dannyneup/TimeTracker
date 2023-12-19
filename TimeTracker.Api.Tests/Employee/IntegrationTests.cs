@@ -57,7 +57,7 @@ public class IntegrationsTestses(TimeTrackerWebApplicationFactory<Program> facto
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<EmployeeReadViewModel>();
         Assert.NotNull(resultReadViewModel);
 
-        var result = Mapper.Map<Api.Employee.Employee>(resultReadViewModel);
+        var result = Mapper.Map<Api.Employee.Models.Employee>(resultReadViewModel);
 
         Assert.Equal(insertedEmployee, result);
     }

@@ -27,7 +27,7 @@ public class EmployeeController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create(EmployeeWriteViewModel employeeWriteViewModel)
     {
-        var employee = _mapper.Map<Employee>(employeeWriteViewModel);
+        var employee = _mapper.Map<Models.Employee>(employeeWriteViewModel);
         
         var employeeEntry = await _context.AddAsync(employee);
         await _context.SaveChangesAsync();
@@ -51,6 +51,13 @@ public class EmployeeController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
+        
+        //methode employeeservice-findemployeeasync -> employee/null
+        
+        //Controller Logic in EmployeeService
+        //Persistenslogik in Repository
+        
+        
         var employee = await _context.Employees.FindAsync(id);
 
         var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employee);
@@ -67,7 +74,7 @@ public class EmployeeController : ControllerBase
         if (!_emailValidationService.IsValidEmail(inputEmployeeWriteViewModel.EmailAddress))
             return BadRequest("invalid Email-Address");
 
-        var employee = _mapper.Map<Employee>(inputEmployeeWriteViewModel);
+        var employee = _mapper.Map<Models.Employee>(inputEmployeeWriteViewModel);
         employee.Id = id;
         
         _context.Entry(employee).State = EntityState.Modified;

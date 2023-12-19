@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
+using TimeTracker.Api.Employee;
+using TimeTracker.Api.Employee.Models;
+using TimeTracker.Api.Project;
+using TimeTracker.Api.Project.Models;
+using TimeTracker.Api.Repositories;
 using TimeTracker.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +24,13 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<EmailValidationService>();
 builder.Services.AddScoped<WorkingHoursCalculationService>();
+
+builder.Services.AddScoped<IRepository<Employee, EmployeeRequestModel, EmployeeResponseModel>,
+    Repository<Employee, EmployeeRequestModel, EmployeeResponseModel>>();
+builder.Services.AddScoped<IRepository<Project, ProjectRequestModel, ProjectResponseModel>, 
+    ProjectRepository>();
+
+builder.Services.AddScoped<ProjectService>();
 
 var app = builder.Build();
 

@@ -14,7 +14,7 @@ public class Project : IEquatable<Project>
     [Required] 
     public string Customer { get; set; } = null!;
     
-    public ICollection<Employee.Employee> Employees { get; set; } = new List<Employee.Employee>();
+    public ICollection<Employee.Models.Employee> Employees { get; set; } = new List<Employee.Models.Employee>();
 
     public bool Equals(Project? other)
     {

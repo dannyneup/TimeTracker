@@ -7,10 +7,16 @@ public class EmployeeMappingProfile : Profile
 {
     public EmployeeMappingProfile()
     {
-        CreateMap<Employee, EmployeeReadViewModel>();
-        CreateMap<Employee, EmployeeWriteViewModel>();
-        CreateMap<EmployeeReadViewModel, Employee>();
-        CreateMap<EmployeeWriteViewModel, Employee>();
+        CreateMap<Models.Employee, EmployeeReadViewModel>();
+        CreateMap<Models.Employee, EmployeeWriteViewModel>();
+        CreateMap<Models.Employee, EmployeeResponseModel>();
+        
+        CreateMap<EmployeeReadViewModel, Models.Employee>();
         CreateMap<EmployeeReadViewModel, EmployeeWriteViewModel>();
+        
+        CreateMap<EmployeeWriteViewModel, Models.Employee>();
+
+        CreateMap<EmployeeResponseModel, EmployeeReadViewModel>();
+        CreateMap<EmployeeResponseModel, Models.Employee>();
     }
 }

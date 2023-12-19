@@ -20,11 +20,11 @@ public abstract class BaseIntegrationTests : IClassFixture<TimeTrackerWebApplica
         Mapper = factory.Services.GetRequiredService<IMapper>();
     }
     
-    protected async Task<Api.Employee.Employee> InsertTestEmployee()
+    protected async Task<Api.Employee.Models.Employee> InsertTestEmployee()
     {
         await using var context = Factory.CreateDbContext();
 
-        var employee = new Api.Employee.Employee
+        var employee = new Api.Employee.Models.Employee
         {
             Id = 0,
             FirstName = "Max",
