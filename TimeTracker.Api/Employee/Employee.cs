@@ -16,6 +16,8 @@ public class Employee : IEquatable<Employee>
 
     public List<Project.Project> Projects { get; set; } = [];
 
+    public List<Booking.Booking> Bookings { get; set; } = [];
+
     public bool Equals(Employee? other)
     {
         if (ReferenceEquals(null, other)) return false;

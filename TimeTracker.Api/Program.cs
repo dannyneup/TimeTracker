@@ -18,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<EmailValidationService>();
+builder.Services.AddScoped<WorkingHoursCalculationService>();
 
 var app = builder.Build();
 

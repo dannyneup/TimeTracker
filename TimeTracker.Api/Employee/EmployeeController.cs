@@ -14,12 +14,14 @@ public class EmployeeController : ControllerBase
     private readonly TimeTrackerContext _context;
     private readonly IMapper _mapper;
     private readonly EmailValidationService _emailValidationService;
+    private readonly WorkingHoursCalculationService _workingHoursCalculationService;
 
-    public EmployeeController(TimeTrackerContext context, IMapper mapper, EmailValidationService emailValidationService)
+    public EmployeeController(TimeTrackerContext context, IMapper mapper, EmailValidationService emailValidationService, WorkingHoursCalculationService workingHoursCalculationService)
     {
         _context = context;
         _mapper = mapper;
         _emailValidationService = emailValidationService;
+        _workingHoursCalculationService = workingHoursCalculationService;
     }
     
     [HttpPost]
@@ -96,6 +98,16 @@ public class EmployeeController : ControllerBase
         var projects = employee!.Projects;
         
         return Ok(projects);
+    }
+
+    [HttpGet("{id}/workinghours")]
+    public async Task<ActionResult> GetEmployeesWorkingHours(int id, [FromQuery] DateTimeOffset? timespanStart, DateTimeOffset? timespanEnd)
+    {
+        if (timespanEnd == null || timespanStart == null)
+            return BadRequest("timespanStart and timespanEnd are required");
+
+        var workingHours =await _workingHoursCalculationService.GetEmployeeWorkingHours(id, (DateTimeOffset)timespanStart, (DateTimeOffset)timespanEnd);
+        return Ok(workingHours);
     }
     
     private Task<bool> EntityExists(int id)
