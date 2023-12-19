@@ -33,10 +33,36 @@ public class BookingController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult> GetAll()
+    public async Task<ActionResult> GetAll([FromQuery] DateTimeOffset? timespanStart, DateTimeOffset? timespanEnd)
     {
-        var bookings = await _context.Bookings
-            .ToListAsync();
+        List<Booking> bookings;
+        
+        if (timespanEnd != null && timespanStart != null)
+        {
+            bookings = await _context.Bookings
+                .Where(b => b.Start >= timespanStart && b.End <= timespanEnd)
+                .ToListAsync();
+        }
+        
+        else if (timespanStart != null)
+        {
+            bookings = await _context.Bookings
+                .Where(b => b.Start >= timespanStart)
+                .ToListAsync();
+        }
+        
+        else if (timespanEnd != null)
+        {
+            bookings = await _context.Bookings
+                .Where(b => b.End <= timespanEnd)
+                .ToListAsync();
+        }
+
+        else
+        {
+            bookings = await _context.Bookings
+                .ToListAsync();
+        }
 
         var bookingReadViewModels = _mapper.Map<List<BookingReadViewModel>>(bookings);
     
