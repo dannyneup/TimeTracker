@@ -5,7 +5,7 @@ using TimeTracker.Api.Employee.ViewModels;
 
 namespace TimeTracker.Api.Tests.Employee;
 
-public class IntegrationsTestses(TimeTrackerWebApplicationFactory<Program> factory) : BaseIntegrationTests(factory)
+public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory) : BaseIntegrationTests(factory)
 {
     private const string EmployeeEndpoint = "employees";
 

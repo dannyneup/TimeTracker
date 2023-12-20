@@ -5,7 +5,7 @@ using TimeTracker.Api.Booking.ViewModels;
 namespace TimeTracker.Api.Tests.Booking;
 
 
-public class IntegrationsTestses(TimeTrackerWebApplicationFactory<Program> factory) : BaseIntegrationTests(factory)
+public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory) : BaseIntegrationTests(factory)
 {
     private const string BookingEndpoint = "bookings";
 
