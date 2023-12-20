@@ -16,12 +16,12 @@ public class ProjectRepository : Repository<Models.Project, ProjectRequestModel,
         _employeeRepository = employeeRepository;
     }
 
-    public override async Task<List<ProjectResponseModel>> GetAllAsync()
+    public override IQueryable<ProjectResponseModel> GetAll()
     {
-        var projects = await Context.Projects
+        var projects = Context.Projects
             .Include(p => p.Employees)
-            .ToListAsync();
-        return Mapper.Map<List<ProjectResponseModel>>(projects);
+            .AsQueryable();
+        return Mapper.Map<IQueryable<ProjectResponseModel>>(projects);
     }
 
     public override async Task<ProjectResponseModel> AddAsync(ProjectRequestModel request)
@@ -31,9 +31,14 @@ public class ProjectRepository : Repository<Models.Project, ProjectRequestModel,
         Context.Projects.Add(project);
         await Context.SaveChangesAsync();
 
-        var employeeResponses = (await _employeeRepository.GetAllAsync())
-            .Where(e => request.EmployeeIds.Contains(e.Id))
-            .ToList();
+        var employeeIds = request.EmployeeIds;
+        List<EmployeeResponseModel> employeeResponses = [];
+        foreach (var employeeId in employeeIds)
+        {
+            var employeeResponse = await _employeeRepository.GetByIdAsync(employeeId);
+            if (employeeResponse == null) continue;
+            employeeResponses.Add(employeeResponse);
+        }
         
         var response = Mapper.Map<ProjectResponseModel>(project) with{Employees = employeeResponses};
         return response;

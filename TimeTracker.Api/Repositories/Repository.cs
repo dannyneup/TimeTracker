@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper.QueryableExtensions;
 using TimeTracker.Api.Context;
 
 namespace TimeTracker.Api.Repositories;
@@ -24,10 +24,10 @@ public class Repository<T, TRequest, TResponse> : IRepository<T, TRequest, TResp
         return Mapper.Map<TResponse>(entity);
     }
 
-    public virtual async Task<List<TResponse>> GetAllAsync()
+    public virtual IQueryable<TResponse> GetAll()
     {
-        var entities = await Context.Set<T>().ToListAsync();
-        return Mapper.Map<List<TResponse>>(entities);
+        var entities = Context.Set<T>();
+        return entities.ProjectTo<TResponse>(Mapper.ConfigurationProvider);
     }
 
     public virtual async Task<TResponse> AddAsync(TRequest request)

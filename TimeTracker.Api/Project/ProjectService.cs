@@ -1,4 +1,5 @@
-﻿using TimeTracker.Api.Project.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TimeTracker.Api.Project.Models;
 using TimeTracker.Api.Repositories;
 
 namespace TimeTracker.Api.Project;
@@ -19,7 +20,7 @@ public class ProjectService
 
     public Task<List<ProjectResponseModel>> GetAllProjectsAsync()
     {
-        return _repository.GetAllAsync();
+        return _repository.GetAll().ToListAsync();
     }
 
     public Task<ProjectResponseModel?> GetProjectByIdAsync(int id)
