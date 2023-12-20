@@ -29,7 +29,7 @@ builder.Services.AddScoped<ObjectPropertyCheckingService>();
 
 builder.Services.AddScoped<IRepository<Employee, EmployeeRequestModel, EmployeeResponseModel>,
     Repository<Employee, EmployeeRequestModel, EmployeeResponseModel>>();
-builder.Services.AddScoped<IRepository<Project, ProjectRequestModel, ProjectResponseModel>, 
+builder.Services.AddScoped<IRepository<Project, ProjectWriteModel, ProjectReadModel>, 
     ProjectRepository>();
 
 

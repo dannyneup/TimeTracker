@@ -7,7 +7,7 @@ using TimeTracker.Api.Repositories;
 
 namespace TimeTracker.Api.Project;
 
-public class ProjectRepository : Repository<Models.Project, ProjectRequestModel, ProjectResponseModel>
+public class ProjectRepository : Repository<Models.Project, ProjectWriteModel, ProjectReadModel>
 {
     private readonly IRepository<Employee.Models.Employee, EmployeeRequestModel, EmployeeResponseModel> _employeeRepository;
 
@@ -16,22 +16,22 @@ public class ProjectRepository : Repository<Models.Project, ProjectRequestModel,
         _employeeRepository = employeeRepository;
     }
 
-    public override IQueryable<ProjectResponseModel> GetAll()
+    public override IQueryable<ProjectReadModel> GetAll()
     {
         var projects = Context.Projects
             .Include(p => p.Employees)
             .AsQueryable();
-        return Mapper.Map<IQueryable<ProjectResponseModel>>(projects);
+        return Mapper.Map<IQueryable<ProjectReadModel>>(projects);
     }
 
-    public override async Task<ProjectResponseModel> AddAsync(ProjectRequestModel request)
+    public override async Task<ProjectReadModel> AddAsync(ProjectWriteModel write)
     {
-        var project = Mapper.Map<Models.Project>(request);
+        var project = Mapper.Map<Models.Project>(write);
         
         Context.Projects.Add(project);
         await Context.SaveChangesAsync();
 
-        var employeeIds = request.EmployeeIds;
+        var employeeIds = write.EmployeeIds;
         List<EmployeeResponseModel> employeeResponses = [];
         foreach (var employeeId in employeeIds)
         {
@@ -40,22 +40,22 @@ public class ProjectRepository : Repository<Models.Project, ProjectRequestModel,
             employeeResponses.Add(employeeResponse);
         }
         
-        var response = Mapper.Map<ProjectResponseModel>(project) with{Employees = employeeResponses};
+        var response = Mapper.Map<ProjectReadModel>(project) with{Employees = employeeResponses};
         return response;
     }
     
-    public override async Task UpdateAsync(int id, ProjectRequestModel request)
+    public override async Task UpdateAsync(int id, ProjectWriteModel write)
     {
         var project = await Context.Projects.FindAsync(id);
         if(project == null) return;
 
         var employees = Context.Employees
-            .Where(e => request.EmployeeIds.Contains(e.Id))
+            .Where(e => write.EmployeeIds.Contains(e.Id))
             .ToList();
         
         project.Employees = employees;
         
-        Context.Entry(project).CurrentValues.SetValues(request);
+        Context.Entry(project).CurrentValues.SetValues(write);
         
         await Context.SaveChangesAsync();
     }

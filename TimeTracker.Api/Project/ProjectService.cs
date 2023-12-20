@@ -6,29 +6,29 @@ namespace TimeTracker.Api.Project;
 
 public class ProjectService
 {
-    private readonly IRepository<Models.Project, ProjectRequestModel, ProjectResponseModel> _repository;
+    private readonly IRepository<Models.Project, ProjectWriteModel, ProjectReadModel> _repository;
 
-    public ProjectService(IRepository<Models.Project, ProjectRequestModel, ProjectResponseModel> repository)
+    public ProjectService(IRepository<Models.Project, ProjectWriteModel, ProjectReadModel> repository)
     {
         _repository = repository;
     }
 
-    public Task<ProjectResponseModel> CreateProjectAsync(ProjectRequestModel projectRequest)
+    public Task<ProjectReadModel> CreateProjectAsync(ProjectWriteModel projectWrite)
     {
-        return _repository.AddAsync(projectRequest);
+        return _repository.AddAsync(projectWrite);
     }
 
-    public Task<List<ProjectResponseModel>> GetAllProjectsAsync()
+    public Task<List<ProjectReadModel>> GetAllProjectsAsync()
     {
         return _repository.GetAll().ToListAsync();
     }
 
-    public Task<ProjectResponseModel?> GetProjectByIdAsync(int id)
+    public Task<ProjectReadModel?> GetProjectByIdAsync(int id)
     {
         return _repository.GetByIdAsync(id);
     }
 
-    public Task EditProject(int id, ProjectRequestModel projectResponse)
+    public Task EditProject(int id, ProjectWriteModel projectResponse)
     {
         return _repository.UpdateAsync(id, projectResponse);
     }
