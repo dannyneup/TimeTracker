@@ -9,12 +9,12 @@ public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory
 {
     private const string ProjectEndpoint = "projects";
 
-    /*
     [Theory]
-    [InlineData("Project-Name", "My Customer", [1])]
-    
+    [InlineData("Project-Name", "My Customer", new[]{1})]
     public async Task CreateProjectWithValidData(string name, string customer, int[] employeeIds)
     {
+        var insertedEmployee = await InsertTestEmployee();
+        
         var projectWriteViewModel = new ProjectWriteViewModel(name, customer, employeeIds);
             
         var response = await Client.PostAsJsonAsync(ProjectEndpoint, projectWriteViewModel, JsonSerializerOptions);
@@ -25,17 +25,19 @@ public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory
         Assert.NotNull(resultReadViewModel);
 
         var resultWriteViewModel = Mapper.Map<ProjectWriteViewModel>(resultReadViewModel);
+
+        var areEmployeeIdsEqual = resultWriteViewModel.EmployeeIds.SequenceEqual(projectWriteViewModel.EmployeeIds);
+        Assert.True(areEmployeeIdsEqual);
         
-        Assert.Equal(projectWriteViewModel, resultWriteViewModel);
+        Assert.Equal(projectWriteViewModel, resultWriteViewModel with {EmployeeIds = projectWriteViewModel.EmployeeIds});
     }
-    */
 
     [Theory]
     [InlineData(@"{""Name"": ""Dummy-Name""}")]
     [InlineData(@"{""Customer"": ""Dummy-Customer""}")]
     [InlineData(@"{""Name"": 9}")]
     [InlineData(@"{[""Name"": ""Dummy-Name"", ""Customer"": ""Dummy-Customer""]}")]
-    public async Task CreateProjectWithInValidData(string json)
+    public async Task CreateProjectWithInvalidData(string json)
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -55,14 +57,13 @@ public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<ProjectReadViewModel>();
         Assert.NotNull(resultReadViewModel);
 
-        var result = Mapper.Map<TimeTracker.Api.Project.Project>(resultReadViewModel);
+        var result = Mapper.Map<Api.Project.Models.Project>(resultReadViewModel);
 
         Assert.Equal(insertedProject, result);
     }
-
-    /*
+    
     [Theory]
-    [InlineData("Updated Dummy-Name", "Updated Dummy-Customer", [1])]
+    [InlineData("Updated Dummy-Name", "Updated Dummy-Customer", new[]{1})]
     public async Task UpdateExistingProject(string name, string customer, int[] employeeIds)
     {
         var insertedProject = await InsertTestProject();
@@ -72,12 +73,12 @@ public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory
         var response = await Client.PutAsJsonAsync($"{ProjectEndpoint}/{insertedProject.Id}", updatedProjectWriteViewModel, JsonSerializerOptions);
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
-    */
 
     [Theory]
-    [InlineData(1, @"{""Name"": ""Updated Dummy-Name""}")]
+    [InlineData(1, """{"Name": "Updated Dummy-Name"}""")]
     public async Task UpdateExistingProjectWithInvalidData(int id, string json)
     {
+        await InsertTestProject();
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await Client.PutAsync($"{ProjectEndpoint}/{id}", httpContent);
@@ -85,7 +86,7 @@ public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory
     }
     
     [Theory]
-    [InlineData(5, @"{""Name"": ""Updated Dummy-Name"", ""Customer"": ""Updated Customer-Name""}")]
+    [InlineData(5, """{"Name": "Updated Dummy-Name", "Customer": "Updated Customer-Name", "EmployeeIds": [1]}""")]
     public async Task UpdateNonExistingProject(int id, string json)
     {
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
