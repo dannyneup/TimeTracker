@@ -25,10 +25,10 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult> Create(ProjectWriteViewModel projectWriteViewModel)
     {
         if (_objectPropertyCheckingService.HasNullOrEmptyProperties(projectWriteViewModel)) return BadRequest();
-        var projectRequest = _mapper.Map<ProjectWriteModel>(projectWriteViewModel);
-        var projectResponse = await _projectService.CreateProjectAsync(projectRequest);
+        var projectWrite = _mapper.Map<ProjectWriteModel>(projectWriteViewModel);
+        var projectRead = await _projectService.CreateProjectAsync(projectWrite);
 
-        var projectReadViewModel = _mapper.Map<ProjectReadViewModel>(projectResponse);
+        var projectReadViewModel = _mapper.Map<ProjectReadViewModel>(projectRead);
     
         return CreatedAtAction("GetById", new {id = projectReadViewModel.Id}, projectReadViewModel);
     }
@@ -60,8 +60,8 @@ public class ProjectController : ControllerBase
     {
         if (_objectPropertyCheckingService.HasNullOrEmptyProperties(projectWriteViewModel)) return BadRequest();
         if (await _projectService.GetProjectByIdAsync(id) == null) return NotFound();
-        var projectRequest = _mapper.Map<ProjectWriteModel>(projectWriteViewModel);
-        await _projectService.EditProject(id, projectRequest);
+        var projectWrite = _mapper.Map<ProjectWriteModel>(projectWriteViewModel);
+        await _projectService.EditProject(id, projectWrite);
         return NoContent();
     }
 
