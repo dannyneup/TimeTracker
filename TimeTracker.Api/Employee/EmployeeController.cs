@@ -51,13 +51,6 @@ public class EmployeeController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
-        
-        //methode employeeservice-findemployeeasync -> employee/null
-        
-        //Controller Logic in EmployeeService
-        //Persistenslogik in Repository
-        
-        
         var employee = await _context.Employees.FindAsync(id);
 
         var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employee);

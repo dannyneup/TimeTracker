@@ -1,6 +1,5 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
 using TimeTracker.Api.Project.Models;
 using TimeTracker.Api.Project.ViewModels;

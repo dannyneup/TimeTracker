@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using TimeTracker.Api.Project.Models;
+﻿using TimeTracker.Api.Project.Models;
 using TimeTracker.Api.Repositories;
 
 namespace TimeTracker.Api.Project;
