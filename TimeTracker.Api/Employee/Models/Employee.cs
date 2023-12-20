@@ -14,7 +14,7 @@ public class Employee : IEquatable<Employee>
     
     public string EmailAddress { get; set; } = null!;
 
-    public List<Project.Project> Projects { get; set; } = [];
+    public List<Project.Models.Project> Projects { get; set; } = [];
 
     public List<Booking.Booking> Bookings { get; set; } = [];
 

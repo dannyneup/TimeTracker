@@ -8,16 +8,21 @@ public class ProjectMappingProfile : Profile
 {
     public ProjectMappingProfile()
     {
-        CreateMap<Project, ProjectRequestModel>();
-        CreateMap<Project, ProjectResponseModel>();
-        CreateMap<Project, ProjectWriteViewModel>();
+        CreateMap<Models.Project, ProjectRequestModel>();
+        CreateMap<Models.Project, ProjectResponseModel>();
+        CreateMap<Models.Project, ProjectWriteViewModel>();
 
         CreateMap<ProjectWriteViewModel, ProjectWriteViewModel>();
         CreateMap<ProjectWriteViewModel, ProjectRequestModel>();
-        
+
         CreateMap<ProjectReadViewModel, ProjectResponseModel>();
+        CreateMap<ProjectReadViewModel, Models.Project>();
+        CreateMap<ProjectReadViewModel, ProjectWriteViewModel>()
+            .ForMember(wvm => wvm.EmployeeIds, 
+                m => m
+                    .MapFrom(rvm => rvm.Employees.Count != 0 ? rvm.Employees.Select(e => e.Id).ToArray() : Array.Empty<int>()));
         
-        CreateMap<ProjectRequestModel, Project>();
+        CreateMap<ProjectRequestModel, Models.Project>();
 
         CreateMap<ProjectResponseModel, ProjectReadViewModel>();
         CreateMap<ProjectResponseModel, ProjectRequestModel>();

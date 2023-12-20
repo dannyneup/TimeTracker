@@ -5,7 +5,7 @@ public interface IRepository<T, TRequest, TResponse>
     where TRequest : class
     where TResponse : class
 {
-    Task<TResponse> GetByIdAsync(int id);
+    Task<TResponse?> GetByIdAsync(int id);
     Task<List<TResponse>> GetAllAsync();
     Task<TResponse> AddAsync(TRequest request);
     Task UpdateAsync(int id, TRequest request);

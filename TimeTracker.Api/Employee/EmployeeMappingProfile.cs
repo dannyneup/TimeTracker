@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TimeTracker.Api.Employee.Models;
 using TimeTracker.Api.Employee.ViewModels;
 
 namespace TimeTracker.Api.Employee;

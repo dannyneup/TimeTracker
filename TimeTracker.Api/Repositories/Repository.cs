@@ -18,7 +18,7 @@ public class Repository<T, TRequest, TResponse> : IRepository<T, TRequest, TResp
         Mapper = mapper;
     }
 
-    public virtual async Task<TResponse> GetByIdAsync(int id)
+    public virtual async Task<TResponse?> GetByIdAsync(int id)
     {
         var entity = await Context.Set<T>().FindAsync(id);
         return Mapper.Map<TResponse>(entity);

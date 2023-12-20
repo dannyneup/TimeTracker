@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Api.Employee;
+using TimeTracker.Api.Employee.Models;
 
 namespace TimeTracker.Api.Project.Models;
 

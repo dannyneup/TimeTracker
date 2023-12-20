@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TimeTracker.Api.Project;
+namespace TimeTracker.Api.Project.Models;
 
 [Table("Project")]
 public class Project : IEquatable<Project>

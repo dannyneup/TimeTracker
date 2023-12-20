@@ -38,11 +38,11 @@ public abstract class BaseIntegrationTests : IClassFixture<TimeTrackerWebApplica
         return employee;
     }
     
-    protected async Task<Api.Project.Project> InsertTestProject()
+    protected async Task<Api.Project.Models.Project> InsertTestProject()
     {
         await using var context = Factory.CreateDbContext();
 
-        var project = new Api.Project.Project
+        var project = new Api.Project.Models.Project
         {
             Id = 0,
             Name = "Dummy-Name",

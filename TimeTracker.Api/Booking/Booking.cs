@@ -20,7 +20,7 @@ public class Booking : IEquatable<Booking>
     public DateTimeOffset End { get; set; }
 
     public Employee.Models.Employee Employee { get; set; } = null!;
-    public Project.Project Project { get; set; } = null!;
+    public Project.Models.Project Project { get; set; } = null!;
 
     public bool Equals(Booking? other)
     {

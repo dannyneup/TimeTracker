@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TimeTracker.Api.Context;
 using TimeTracker.Api.Project.Models;
 using TimeTracker.Api.Project.ViewModels;
+using TimeTracker.Api.Services;
 
 namespace TimeTracker.Api.Project;
 
@@ -13,17 +14,20 @@ public class ProjectController : ControllerBase
     private readonly TimeTrackerContext _context;
     private readonly ProjectService _projectService;
     private readonly IMapper _mapper;
+    private readonly ObjectPropertyCheckingService _objectPropertyCheckingService;
 
-    public ProjectController(TimeTrackerContext context, ProjectService projectService, IMapper mapper)
+    public ProjectController(TimeTrackerContext context, ProjectService projectService, IMapper mapper, ObjectPropertyCheckingService objectPropertyCheckingService)
     {
         _context = context;
         _projectService = projectService;
         _mapper = mapper;
+        _objectPropertyCheckingService = objectPropertyCheckingService;
     }
 
     [HttpPost]
     public async Task<ActionResult> Create(ProjectWriteViewModel projectWriteViewModel)
     {
+        if (_objectPropertyCheckingService.HasNullOrEmptyProperties(projectWriteViewModel)) return BadRequest();
         var projectRequest = _mapper.Map<ProjectRequestModel>(projectWriteViewModel);
         var projectResponse = await _projectService.CreateProjectAsync(projectRequest);
 
@@ -57,6 +61,8 @@ public class ProjectController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> Edit(int id, ProjectWriteViewModel projectWriteViewModel)
     {
+        if (_objectPropertyCheckingService.HasNullOrEmptyProperties(projectWriteViewModel)) return BadRequest();
+        if (await _projectService.GetProjectByIdAsync(id) == null) return NotFound();
         var projectRequest = _mapper.Map<ProjectRequestModel>(projectWriteViewModel);
         await _projectService.EditProject(id, projectRequest);
         return NoContent();
