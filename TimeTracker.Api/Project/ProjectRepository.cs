@@ -9,9 +9,9 @@ namespace TimeTracker.Api.Project;
 
 public class ProjectRepository : Repository<Models.Project, ProjectWriteModel, ProjectReadModel>
 {
-    private readonly IRepository<Employee.Models.Employee, EmployeeRequestModel, EmployeeResponseModel> _employeeRepository;
+    private readonly IRepository<Employee.Models.Employee, EmployeeWriteModel, EmployeeReadModel> _employeeRepository;
 
-    public ProjectRepository(TimeTrackerContext context, IMapper mapper, IRepository<Employee.Models.Employee, EmployeeRequestModel, EmployeeResponseModel> employeeRepository) : base(context, mapper)
+    public ProjectRepository(TimeTrackerContext context, IMapper mapper, IRepository<Employee.Models.Employee, EmployeeWriteModel, EmployeeReadModel> employeeRepository) : base(context, mapper)
     {
         _employeeRepository = employeeRepository;
     }
@@ -32,7 +32,7 @@ public class ProjectRepository : Repository<Models.Project, ProjectWriteModel, P
         await Context.SaveChangesAsync();
 
         var employeeIds = write.EmployeeIds;
-        List<EmployeeResponseModel> employeeResponses = [];
+        List<EmployeeReadModel> employeeResponses = [];
         foreach (var employeeId in employeeIds)
         {
             var employeeResponse = await _employeeRepository.GetByIdAsync(employeeId);
