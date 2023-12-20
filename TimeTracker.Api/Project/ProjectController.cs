@@ -1,6 +1,5 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TimeTracker.Api.Context;
 using TimeTracker.Api.Project.Models;
 using TimeTracker.Api.Project.ViewModels;
 using TimeTracker.Api.Services;
@@ -11,14 +10,12 @@ namespace TimeTracker.Api.Project;
 [Route("/projects")]
 public class ProjectController : ControllerBase
 {
-    private readonly TimeTrackerContext _context;
     private readonly ProjectService _projectService;
     private readonly IMapper _mapper;
     private readonly ObjectPropertyCheckingService _objectPropertyCheckingService;
 
-    public ProjectController(TimeTrackerContext context, ProjectService projectService, IMapper mapper, ObjectPropertyCheckingService objectPropertyCheckingService)
+    public ProjectController(ProjectService projectService, IMapper mapper, ObjectPropertyCheckingService objectPropertyCheckingService)
     {
-        _context = context;
         _projectService = projectService;
         _mapper = mapper;
         _objectPropertyCheckingService = objectPropertyCheckingService;
