@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Context;
 using TimeTracker.Api.Employee.Models;
@@ -19,9 +20,17 @@ public class ProjectRepository : Repository<Models.Project, ProjectWriteModel, P
     public override IQueryable<ProjectReadModel> GetAll()
     {
         var projects = Context.Projects
+            .Include(p => p.Employees);
+        return projects.ProjectTo<ProjectReadModel>(Mapper.ConfigurationProvider);
+    }
+
+    public override async Task<ProjectReadModel?> GetByIdAsync(int id)
+    {
+        var project = await Context.Projects
             .Include(p => p.Employees)
-            .AsQueryable();
-        return Mapper.Map<IQueryable<ProjectReadModel>>(projects);
+            .Where(p => p.Id == id)
+            .FirstOrDefaultAsync();
+        return Mapper.Map<ProjectReadModel>(project);
     }
 
     public override async Task<ProjectReadModel> AddAsync(ProjectWriteModel write)
