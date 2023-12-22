@@ -65,6 +65,8 @@ public class EmployeeController : ControllerBase
     {
         if (_objectPropertyCheckingService.HasNullOrEmptyProperties(employeeWriteViewModel)) return BadRequest();
         if (await _employeeService.GetEmployeeByIdAsync(id) == null) return NotFound();
+        if (!_emailValidationService.IsValidEmail(employeeWriteViewModel.EmailAddress))
+            return BadRequest("emailAddress is invalid");
         var employeeWrite = _mapper.Map<EmployeeWriteModel>(employeeWriteViewModel);
         await _employeeService.EditEmployee(id, employeeWrite);
         return NoContent();
