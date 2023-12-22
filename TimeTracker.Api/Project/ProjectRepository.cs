@@ -36,21 +36,18 @@ public class ProjectRepository : Repository<Models.Project, ProjectWriteModel, P
     public override async Task<ProjectReadModel> AddAsync(ProjectWriteModel write)
     {
         var project = Mapper.Map<Models.Project>(write);
-        
+
         var employeeIds = write.EmployeeIds;
-        List<Employee.Models.Employee> employees = [];
         List<EmployeeReadModel> employeeReadModels = [];
         foreach (var employeeId in employeeIds)
         {
-            var employeeReadModel = await _employeeRepository.GetByIdAsync(employeeId);
-            var employee = Mapper.Map<Employee.Models.Employee>(employeeReadModel);
+            var employee = await Context.Employees.FindAsync(employeeId);
+            var employeeReadModel = Mapper.Map<EmployeeReadModel>(employee);
             if (employee == null) continue;
-            employees.Add(employee);
-            employeeReadModels.Add(employeeReadModel!);
+            project.Employees.Add(employee);
+            employeeReadModels.Add(employeeReadModel);
         }
 
-        project.Employees = employees;
-        
         Context.Projects.Add(project);
         await Context.SaveChangesAsync();
         
