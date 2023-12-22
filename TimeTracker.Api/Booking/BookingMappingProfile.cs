@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TimeTracker.Api.Booking.Models;
 using TimeTracker.Api.Booking.ViewModels;
 
 namespace TimeTracker.Api.Booking;
@@ -12,5 +13,7 @@ public class BookingMappingProfile : Profile
         CreateMap<BookingReadViewModel, Booking>();
         CreateMap<BookingWriteViewModel, Booking>();
         CreateMap<BookingReadViewModel, BookingWriteViewModel>();
+
+        CreateMap<Booking, BookingReadModel>();
     }
 }

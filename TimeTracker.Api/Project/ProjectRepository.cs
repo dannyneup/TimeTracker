@@ -37,19 +37,24 @@ public class ProjectRepository : Repository<Models.Project, ProjectWriteModel, P
     {
         var project = Mapper.Map<Models.Project>(write);
         
-        Context.Projects.Add(project);
-        await Context.SaveChangesAsync();
-
         var employeeIds = write.EmployeeIds;
-        List<EmployeeReadModel> employeeResponses = [];
+        List<Employee.Models.Employee> employees = [];
+        List<EmployeeReadModel> employeeReadModels = [];
         foreach (var employeeId in employeeIds)
         {
-            var employeeResponse = await _employeeRepository.GetByIdAsync(employeeId);
-            if (employeeResponse == null) continue;
-            employeeResponses.Add(employeeResponse);
+            var employeeReadModel = await _employeeRepository.GetByIdAsync(employeeId);
+            var employee = Mapper.Map<Employee.Models.Employee>(employeeReadModel);
+            if (employee == null) continue;
+            employees.Add(employee);
+            employeeReadModels.Add(employeeReadModel!);
         }
+
+        project.Employees = employees;
         
-        var response = Mapper.Map<ProjectReadModel>(project) with{Employees = employeeResponses};
+        Context.Projects.Add(project);
+        await Context.SaveChangesAsync();
+        
+        var response = Mapper.Map<ProjectReadModel>(project) with{Employees = employeeReadModels};
         return response;
     }
     

@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TimeTracker.Api.Context;
+using TimeTracker.Api.Employee.Models;
 using TimeTracker.Api.Employee.ViewModels;
 using TimeTracker.Api.Services;
 
@@ -11,80 +10,70 @@ namespace TimeTracker.Api.Employee;
 [Route("/employees")]
 public class EmployeeController : ControllerBase
 {
-    private readonly TimeTrackerContext _context;
-    private readonly IMapper _mapper;
     private readonly EmailValidationService _emailValidationService;
-    private readonly WorkingHoursCalculationService _workingHoursCalculationService;
+    private readonly EmployeeService _employeeService;
+    private readonly IMapper _mapper;
+    private readonly ObjectPropertyCheckingService _objectPropertyCheckingService;
 
-    public EmployeeController(TimeTrackerContext context, IMapper mapper, EmailValidationService emailValidationService, WorkingHoursCalculationService workingHoursCalculationService)
+    public EmployeeController(EmployeeService employeeService, IMapper mapper,
+        EmailValidationService emailValidationService, ObjectPropertyCheckingService objectPropertyCheckingService)
     {
-        _context = context;
+        _employeeService = employeeService;
         _mapper = mapper;
         _emailValidationService = emailValidationService;
-        _workingHoursCalculationService = workingHoursCalculationService;
+        _objectPropertyCheckingService = objectPropertyCheckingService;
     }
-    
+
     [HttpPost]
     public async Task<ActionResult> Create(EmployeeWriteViewModel employeeWriteViewModel)
     {
-        var employee = _mapper.Map<Models.Employee>(employeeWriteViewModel);
-        
-        var employeeEntry = await _context.AddAsync(employee);
-        await _context.SaveChangesAsync();
+        if (_objectPropertyCheckingService.HasNullOrEmptyProperties(employeeWriteViewModel)) return BadRequest();
+        if (!_emailValidationService.IsValidEmail(employeeWriteViewModel.EmailAddress))
+            return BadRequest("emailAddress is invalid");
+        var employeeWrite = _mapper.Map<EmployeeWriteModel>(employeeWriteViewModel);
+        var employeeRead = await _employeeService.CreateEmployeeAsync(employeeWrite);
 
-        var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employeeEntry.Entity);
-    
-        return CreatedAtAction("GetById", new { id = employeeReadViewModel.Id}, employeeReadViewModel);
+        var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employeeRead);
+
+        return CreatedAtAction("GetById", new { id = employeeReadViewModel.Id }, employeeReadViewModel);
     }
-    
+
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
-        var employees = await _context.Employees
-            .ToListAsync();
+        var employees = await _employeeService.GetAllEmployeesAsync();
 
         var employeeReadViewModels = _mapper.Map<List<EmployeeReadViewModel>>(employees);
-    
+
         return Ok(employeeReadViewModels);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
-        var employee = await _context.Employees.FindAsync(id);
+        var employee = await _employeeService.GetEmployeeByIdAsync(id);
 
         var employeeReadViewModel = _mapper.Map<EmployeeReadViewModel>(employee);
-        
+
         return employeeReadViewModel != null
             ? Ok(employeeReadViewModel)
             : NotFound();
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Edit(int id, EmployeeWriteViewModel inputEmployeeWriteViewModel)
+    public async Task<ActionResult> Edit(int id, EmployeeWriteViewModel employeeWriteViewModel)
     {
-        if (!await EntityExists(id)) return NotFound();
-        if (!_emailValidationService.IsValidEmail(inputEmployeeWriteViewModel.EmailAddress))
-            return BadRequest("invalid Email-Address");
-
-        var employee = _mapper.Map<Models.Employee>(inputEmployeeWriteViewModel);
-        employee.Id = id;
-        
-        _context.Entry(employee).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-
+        if (_objectPropertyCheckingService.HasNullOrEmptyProperties(employeeWriteViewModel)) return BadRequest();
+        if (await _employeeService.GetEmployeeByIdAsync(id) == null) return NotFound();
+        var employeeWrite = _mapper.Map<EmployeeWriteModel>(employeeWriteViewModel);
+        await _employeeService.EditEmployee(id, employeeWrite);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        var employee = await _context.Employees.FindAsync(id);
-
-        if (employee is null) return NotFound();
-        _context.Employees.Remove(employee);
-
-        await _context.SaveChangesAsync();
+        await _employeeService.DeleteEmployee(id);
 
         return NoContent();
     }
@@ -92,38 +81,44 @@ public class EmployeeController : ControllerBase
     [HttpGet("{id}/projects")]
     public async Task<ActionResult> GetEmployeesProjects(int id)
     {
-        if (!await EntityExists(id)) return NotFound();
+        if (await _employeeService.GetEmployeeByIdAsync(id) == null) return NotFound();
 
-        var employee = await _context.Employees.Include(e => e.Projects).SingleOrDefaultAsync(x => x.Id == id);
-        var projects = employee!.Projects;
-        
+        var projects = await _employeeService.GetEmployeesProjectsAsync(id);
+
         return Ok(projects);
     }
 
-    [HttpGet("{id}/workinghours")]
-    public async Task<ActionResult> GetEmployeesWorkingHours(int id, [FromQuery] DateTimeOffset? timespanStart, DateTimeOffset? timespanEnd)
+    [HttpGet("{id}/workingHours")]
+    public async Task<ActionResult> GetEmployeesWorkingHours(int id, [FromQuery] DateTimeOffset? filterStart,
+        DateTimeOffset? filterEnd)
     {
-        if (timespanEnd == null || timespanStart == null)
-            return BadRequest("timespanStart and timespanEnd are required");
+        var badRequest = CheckTimestampFilterDateTimes(filterStart, filterEnd);
+        if (badRequest != null) return badRequest;
 
-        var workingHours =await _workingHoursCalculationService.GetEmployeeWorkingHours(id, (DateTimeOffset)timespanStart, (DateTimeOffset)timespanEnd);
+        var workingHours =
+            await _employeeService.GetEmployeesWorkingHoursAsync(id, (DateTimeOffset)filterStart!,
+                (DateTimeOffset)filterEnd!);
         return Ok(workingHours);
     }
-    
-    [HttpGet("{id}/workinghoursdeviation")]
-    public async Task<ActionResult> GetEmployeesWorkingHoursDeviation(int id, [FromQuery] DateTimeOffset? timespanStart, DateTimeOffset? timespanEnd)
+
+    [HttpGet("{id}/workingHoursDeviation")]
+    public async Task<ActionResult> GetEmployeesWorkingHoursDeviation(int id, [FromQuery] DateTimeOffset? filterStart,
+        DateTimeOffset? filterEnd)
     {
-        if (timespanEnd == null || timespanStart == null)
-            return BadRequest("timespanStart and timespanEnd are required");
+        var badRequest = CheckTimestampFilterDateTimes(filterStart, filterEnd);
+        if (badRequest != null) return badRequest;
 
-        if (timespanEnd < timespanStart) return BadRequest("timestampStart must be before timestampEnd");
-
-        var workingHoursDeviation =await _workingHoursCalculationService.GetEmployeeWorkingHoursDeviation(id, (DateTimeOffset)timespanStart, (DateTimeOffset)timespanEnd);
+        var workingHoursDeviation =
+            await _employeeService.GetEmployeesWorkingHoursDeviationAsync(id, (DateTimeOffset)filterStart!,
+                (DateTimeOffset)filterEnd!);
         return Ok(workingHoursDeviation);
     }
-    
-    private Task<bool> EntityExists(int id)
+
+    private BadRequestObjectResult? CheckTimestampFilterDateTimes(DateTimeOffset? start, DateTimeOffset? end)
     {
-        return _context.Employees.AnyAsync(e => e.Id == id);
+        if (end == null || start == null)
+            return BadRequest("filterStart and filterEnd are required");
+        if (end < start) return BadRequest("timestampStart must be before timestampEnd");
+        return null;
     }
 }
