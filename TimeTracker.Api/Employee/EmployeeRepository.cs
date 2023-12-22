@@ -31,17 +31,6 @@ public class EmployeeRepository : Repository<Employee.Models.Employee, EmployeeW
         return Mapper.Map<EmployeeReadModel>(employee);
     }
     
-    public override async Task<EmployeeReadModel> AddAsync(EmployeeWriteModel write)
-    {
-        var employee = Mapper.Map<Employee.Models.Employee>(write);
-        
-        Context.Employees.Add(employee);
-        await Context.SaveChangesAsync();
-        
-        var response = Mapper.Map<EmployeeReadModel>(employee);
-        return response;
-    }
-    
     public override async Task UpdateAsync(int id, EmployeeWriteModel write)
     {
         var employee = await Context.Employees.FindAsync(id);
