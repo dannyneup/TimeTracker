@@ -12,12 +12,12 @@ public class EmployeeService
 {
     private readonly IRepository<Models.Employee, EmployeeWriteModel, EmployeeReadModel> _repository;
     private readonly IRepository<Project.Models.Project, ProjectWriteModel, ProjectReadModel> _projectRepository;
-    private readonly IRepository<Booking.Booking, BookingWriteModel, BookingReadModel> _bookingRepository;
+    private readonly IRepository<Booking.Models.Booking, BookingWriteModel, BookingReadModel> _bookingRepository;
     private readonly WorkingHoursCalculationService _workingHoursCalculationService;
 
     public EmployeeService(IRepository<Models.Employee, EmployeeWriteModel, EmployeeReadModel> repository,
         IRepository<Project.Models.Project, ProjectWriteModel, ProjectReadModel> projectRepository, 
-        IRepository<Booking.Booking, BookingWriteModel, BookingReadModel> bookingRepository,
+        IRepository<Booking.Models.Booking, BookingWriteModel, BookingReadModel> bookingRepository,
         WorkingHoursCalculationService workingHoursCalculationService)
     {
         _repository = repository;
