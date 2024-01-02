@@ -8,12 +8,12 @@ public class BookingMappingProfile : Profile
 {
     public BookingMappingProfile()
     {
-        CreateMap<Booking, BookingReadViewModel>();
-        CreateMap<Booking, BookingWriteViewModel>();
-        CreateMap<BookingReadViewModel, Booking>();
-        CreateMap<BookingWriteViewModel, Booking>();
+        CreateMap<Models.Booking, BookingReadViewModel>();
+        CreateMap<Models.Booking, BookingWriteViewModel>();
+        CreateMap<BookingReadViewModel, Models.Booking>();
+        CreateMap<BookingWriteViewModel, Models.Booking>();
         CreateMap<BookingReadViewModel, BookingWriteViewModel>();
 
-        CreateMap<Booking, BookingReadModel>();
+        CreateMap<Models.Booking, BookingReadModel>();
     }
 }

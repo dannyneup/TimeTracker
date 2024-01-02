@@ -55,11 +55,11 @@ public abstract class BaseIntegrationTests : IClassFixture<TimeTrackerWebApplica
         return project;
     }
     
-    protected async Task<Api.Booking.Booking> InsertTestBooking(int employeeId, int projectId)
+    protected async Task<Api.Booking.Models.Booking> InsertTestBooking(int employeeId, int projectId)
     {
         await using var context = Factory.CreateDbContext();
 
-        var booking = new Api.Booking.Booking
+        var booking = new Api.Booking.Models.Booking
         {
             Id = 0,
             EmployeeId = employeeId,
@@ -74,7 +74,7 @@ public abstract class BaseIntegrationTests : IClassFixture<TimeTrackerWebApplica
         return booking;
     }
     
-    protected async Task<Api.Booking.Booking> InsertBookingIncludingRequirements()
+    protected async Task<Api.Booking.Models.Booking> InsertBookingIncludingRequirements()
     {
         var insertedEmployee = await InsertTestEmployee();
         var insertedProject = await InsertTestProject();

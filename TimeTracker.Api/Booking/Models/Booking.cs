@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TimeTracker.Api.Booking;
+namespace TimeTracker.Api.Booking.Models;
 
 [Table("Booking")]
 public class Booking : IEquatable<Booking>

@@ -7,7 +7,7 @@ public sealed class TimeTrackerContext(DbContextOptions<TimeTrackerContext> opti
 {
     public DbSet<Employee.Models.Employee> Employees { get; init; } = null!;
     public DbSet<Project.Models.Project> Projects { get; init; } = null!;
-    public DbSet<Booking.Booking> Bookings { get; init; }
+    public DbSet<Booking.Models.Booking> Bookings { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

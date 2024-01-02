@@ -22,7 +22,7 @@ public class BookingController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create(BookingWriteViewModel bookingWriteViewModel)
     {
-        var booking = _mapper.Map<Booking>(bookingWriteViewModel);
+        var booking = _mapper.Map<Models.Booking>(bookingWriteViewModel);
         
         var bookingEntry = await _context.AddAsync(booking);
         await _context.SaveChangesAsync();
@@ -35,7 +35,7 @@ public class BookingController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetAll([FromQuery] DateTimeOffset? timespanStart, DateTimeOffset? timespanEnd)
     {
-        List<Booking> bookings;
+        List<Models.Booking> bookings;
         
         if (timespanEnd != null && timespanStart != null)
         {
@@ -86,7 +86,7 @@ public class BookingController : ControllerBase
     {
         if (!await EntityExists(id)) return NotFound();
 
-        var booking = _mapper.Map<Booking>(inputBookingWriteViewModel);
+        var booking = _mapper.Map<Models.Booking>(inputBookingWriteViewModel);
         booking.Id = id;
         
         _context.Entry(booking).State = EntityState.Modified;

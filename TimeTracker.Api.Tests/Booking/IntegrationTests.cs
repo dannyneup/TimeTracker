@@ -54,7 +54,7 @@ public class IntegrationsTests(TimeTrackerWebApplicationFactory<Program> factory
         var resultReadViewModel = await response.Content.ReadFromJsonAsync<BookingReadViewModel>();
         Assert.NotNull(resultReadViewModel);
 
-        var result = Mapper.Map<Api.Booking.Booking>(resultReadViewModel);
+        var result = Mapper.Map<Api.Booking.Models.Booking>(resultReadViewModel);
 
         Assert.Equal(insertedBooking, result);
     }

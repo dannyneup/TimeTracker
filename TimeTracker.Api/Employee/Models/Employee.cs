@@ -16,7 +16,7 @@ public class Employee : IEquatable<Employee>
 
     public List<Project.Models.Project> Projects { get; set; } = [];
 
-    public List<Booking.Booking> Bookings { get; set; } = [];
+    public List<Booking.Models.Booking> Bookings { get; set; } = [];
 
     public bool Equals(Employee? other)
     {
