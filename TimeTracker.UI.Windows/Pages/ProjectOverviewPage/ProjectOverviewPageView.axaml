@@ -1,0 +1,19 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:employeeOverviewPage="clr-namespace:TimeTracker.UI.Windows.Pages.ProjectOverviewPage"
+             x:DataType="employeeOverviewPage:ProjectOverviewPageViewModel"
+             x:Class="TimeTracker.UI.Windows.Pages.ProjectOverviewPage.ProjectOverviewPageView">
+    
+    <DataGrid
+        ItemsSource="{Binding Projects}"
+        Margin="20">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Id"
+                                Binding="{Binding Id}"/>
+            <DataGridTextColumn Header="First Name"
+                                Binding="{Binding Name}"/>
+            <DataGridTextColumn Header="Last Name"
+                                Binding="{Binding Customer}"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

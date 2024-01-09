@@ -1,0 +1,114 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:userHomePage="clr-namespace:TimeTracker.UI.Windows.Pages.UserHomePage"
+             x:DataType="userHomePage:UserHomePageViewModel"
+             x:Class="TimeTracker.UI.Windows.Pages.UserHomePage.UserHomePageView">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition 
+                Width="15*"
+                MinWidth="250"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <Border
+            Grid.Column="0"
+            BorderBrush="Gray"
+            BorderThickness="1, 1, 1, 0"
+            CornerRadius="2"
+            Padding="10">
+            <StackPanel>
+                <StackPanel
+                    Margin="0, 0, 0, 15">
+                    <TextBlock 
+                        FontSize="40"
+                        HorizontalAlignment="Center">
+                        01:30:00h
+                    </TextBlock>
+                    <TextBlock
+                        FontSize="15"
+                        Foreground="Gray"
+                        HorizontalAlignment="Center">
+                        Time Tracker
+                    </TextBlock>
+                </StackPanel>
+                <Grid
+                    ColumnDefinitions="*, *">
+                    <StackPanel
+                        Grid.Column="0">
+                        <TextBlock
+                            FontSize="20"
+                            HorizontalAlignment="Center">
+                            08:00h
+                        </TextBlock>
+                        <TextBlock
+                            FontSize="15"
+                            Foreground="Gray"
+                            HorizontalAlignment="Center">
+                            limit
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1">
+                        <TextBlock
+                            FontSize="20"
+                            HorizontalAlignment="Center">
+                            05:30h
+                        </TextBlock>
+                        <TextBlock
+                            FontSize="15"
+                            Foreground="Gray"
+                            HorizontalAlignment="Center">
+                            today's total
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+                <ItemsControl
+                    ItemsSource="{Binding AssociatedProjects}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                ColumnDefinitions="Auto, *, Auto">
+                                <TextBlock 
+                                    Text="{Binding Name}"
+                                    Grid.Column="0"
+                                    FontSize="15">
+                                </TextBlock>
+                                <StackPanel 
+                                    Grid.Column="2"
+                                    Orientation="Horizontal">
+                                    <TextBlock>
+                                        01:30h
+                                    </TextBlock>
+                                    <Button 
+                                        Grid.Column="0" 
+                                        x:Name="playPauseButton"
+                                        Padding="5"/>
+                                        <!--
+                                        <Button.Content>
+                                            <Canvas Width="10" Height="10">
+                                                <Polygon Points="0,0 0,10 10,5" Fill="Gray" />
+                                            </Canvas>
+                                        </Button.Content>
+                                        <Button.Content>
+                                            <Canvas Width="10" Height="10">
+                                                <Rectangle Width="3" Height="10" Fill="Gray" />
+                                                <Rectangle Width="3" Height="10" Canvas.Left="7" Fill="Gray" />
+                                            </Canvas>
+                                        </Button.Content>
+                                        -->
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+        
+        <StackPanel 
+            Grid.Column="1">
+            
+        </StackPanel>
+    </Grid>
+    
+</UserControl>
