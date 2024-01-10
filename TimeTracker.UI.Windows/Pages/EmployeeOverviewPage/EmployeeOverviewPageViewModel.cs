@@ -31,8 +31,6 @@ public sealed class EmployeeOverviewPageViewModel : ViewModelBase, IPageViewMode
     public async Task OnActivated()
     {
         var (employees, isSuccess) = await _employeeRepository.GetAllAsync();
-        Console.WriteLine(employees.FirstOrDefault().ToString());
-        Console.Write(isSuccess);
         if (!isSuccess) return;
         var employeeList = employees.ToList();
         
