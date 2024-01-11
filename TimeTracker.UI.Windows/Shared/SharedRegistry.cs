@@ -1,10 +1,7 @@
 ﻿using System;
-using AutoMapper;
 using Lamar;
-using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage.Records;
 using TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
 using TimeTracker.UI.Windows.Shared.Models;
-using TimeTracker.UI.Windows.Shared.Models.Employee;
 using TimeTracker.UI.Windows.Shared.Repositories;
 using TimeTracker.UI.Windows.Shared.Services;
 using Uri = System.Uri;

@@ -1,33 +1,33 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeTracker.UI.Windows.Shared;
 using TimeTracker.UI.Windows.Shared.Interfaces;
 using TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
 using TimeTracker.UI.Windows.Shared.Models.Employee;
 using TimeTracker.UI.Windows.Shared.Models.Project;
-using TimeTracker.UI.Windows.Shared.ViewModels;
 
 namespace TimeTracker.UI.Windows.Pages.UserHomePage;
 
-public sealed class UserHomePageViewModel : ViewModelBase, IPageViewModel
+public sealed class UserHomePageViewModel : NotifyPropertyChangedBase, IPageViewModel
 {
     public string Title => Resources.userHomePageTitle;
 
-    public Employee? Employee
+    public EmployeeResponseModel? Employee
     {
         get => _employee; 
         set => SetField(ref _employee, value);
     }
-    public ObservableCollection<Project>? AssociatedProjects
+    private EmployeeResponseModel? _employee;
+    
+    public ObservableCollection<ProjectResponseModel>? AssociatedProjects
     {
         get => _associatedProjects; 
         set => SetField(ref _associatedProjects, value);
     }
-    
-    private Employee? _employee;
-    private ObservableCollection<Project>? _associatedProjects;
-
     private readonly IEmployeeRepository _employeeRepository;
+    
+    private ObservableCollection<ProjectResponseModel>? _associatedProjects;
     
     public UserHomePageViewModel(
         IEmployeeRepository employeeRepository)
@@ -40,7 +40,7 @@ public sealed class UserHomePageViewModel : ViewModelBase, IPageViewModel
         var (projects, isSuccess) = await _employeeRepository.GetAssociatedProjectsAsync(1);
         if (!isSuccess) return;
         var projectList = projects.ToList();
-        AssociatedProjects = new ObservableCollection<Project>(projectList);
+        AssociatedProjects = new ObservableCollection<ProjectResponseModel>(projectList);
     }
 
     public void OnDeactivated()

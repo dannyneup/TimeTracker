@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
 
-public interface IRepository<TModel>
+public interface IRepository<TRequest, TResponse>
 {
-    Task<(IEnumerable<TModel>, bool)> GetAllAsync();
-    Task<(TModel, bool)> GetAsync(int id);
-    Task<(TModel, bool)> AddAsync(TModel input);
-    Task<(TModel, bool)> UpdateAsync(TModel input);
+    Task<(IEnumerable<TResponse>, bool)> GetAllAsync();
+    Task<(TResponse, bool)> GetAsync(int id);
+    Task<(TResponse, bool)> AddAsync(TRequest request);
+    Task<(TResponse, bool)> UpdateAsync(int id, TRequest request);
     Task<bool> DeleteAsync(int id);
 }

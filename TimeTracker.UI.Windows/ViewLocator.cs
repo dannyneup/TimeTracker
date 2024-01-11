@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using TimeTracker.UI.Windows.Shared.ViewModels;
+using TimeTracker.UI.Windows.Shared;
 
 namespace TimeTracker.UI.Windows;
 
@@ -27,6 +27,6 @@ public class ViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is ViewModelBase;
+        return data is NotifyPropertyChangedBase;
     }
 }

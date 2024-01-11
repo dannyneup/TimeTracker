@@ -4,17 +4,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
 using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage;
-using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage.Records;
 using TimeTracker.UI.Windows.Pages.ProjectOverviewPage;
 using TimeTracker.UI.Windows.Pages.UserHomePage;
 using TimeTracker.UI.Windows.Shared;
 using TimeTracker.UI.Windows.Shared.Interfaces;
 using TimeTracker.UI.Windows.Shared.Models;
-using TimeTracker.UI.Windows.Shared.ViewModels;
 
 namespace TimeTracker.UI.Windows.Shell;
 
-public sealed class ApplicationViewModel : ViewModelBase
+public sealed class ApplicationViewModel : NotifyPropertyChangedBase
 {
     public IPageViewModel[] Pages { get; }
     public IPageViewModel? ActivePage

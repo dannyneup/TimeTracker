@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace TimeTracker.UI.Windows.Shared.ViewModels;
+namespace TimeTracker.UI.Windows.Shared;
 
-public class ViewModelBase : INotifyPropertyChanged
+public class NotifyPropertyChangedBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 

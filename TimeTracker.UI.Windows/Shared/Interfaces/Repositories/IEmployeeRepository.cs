@@ -5,7 +5,7 @@ using TimeTracker.UI.Windows.Shared.Models.Project;
 
 namespace TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
 
-public interface IEmployeeRepository : IRepository<Employee>
+public interface IEmployeeRepository : IRepository<EmployeeRequestModel, EmployeeResponseModel>
 {
-    public Task<(IEnumerable<Project>, bool)> GetAssociatedProjectsAsync(int employeeId);
+    public Task<(IEnumerable<ProjectResponseModel>, bool)> GetAssociatedProjectsAsync(int employeeId);
 }

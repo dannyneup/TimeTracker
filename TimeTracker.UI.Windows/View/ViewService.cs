@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls.ApplicationLifetimes;
 using TimeTracker.UI.Windows.Shared;
 using TimeTracker.UI.Windows.Shared.Interfaces;
-using TimeTracker.UI.Windows.Shared.ViewModels;
 
 namespace TimeTracker.UI.Windows.View;
 
@@ -14,7 +13,7 @@ public sealed class ViewService : IViewService
         _desktop = desktop;
     }
 
-    public void ShowMainWindow(ViewModelBase viewModel)
+    public void ShowMainWindow(NotifyPropertyChangedBase viewModel)
     {
         _desktop.MainWindow ??= new MainWindow();
         _desktop.MainWindow.DataContext = viewModel;
