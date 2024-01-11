@@ -25,9 +25,11 @@ public sealed class UserHomePageViewModel : NotifyPropertyChangedBase, IPageView
         get => _associatedProjects; 
         set => SetField(ref _associatedProjects, value);
     }
-    private readonly IEmployeeRepository _employeeRepository;
-    
     private ObservableCollection<ProjectResponseModel>? _associatedProjects;
+
+    public int ActiveProjectId => 1;
+    
+    private readonly IEmployeeRepository _employeeRepository;
     
     public UserHomePageViewModel(
         IEmployeeRepository employeeRepository)

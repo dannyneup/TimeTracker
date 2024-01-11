@@ -1,8 +1,12 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:userHomePage="clr-namespace:TimeTracker.UI.Windows.Pages.UserHomePage"
+             xmlns:valueConverters="clr-namespace:TimeTracker.UI.Windows.Pages.UserHomePage.ValueConverters"
              x:DataType="userHomePage:UserHomePageViewModel"
              x:Class="TimeTracker.UI.Windows.Pages.UserHomePage.UserHomePageView">
+    <UserControl.Resources>
+        <valueConverters:IdToIsActiveBoolMultiValueConverter x:Key="IdToIsActiveBoolMultiValueConverter" />
+    </UserControl.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -64,39 +68,53 @@
                     </StackPanel>
                 </Grid>
                 <ItemsControl
-                    ItemsSource="{Binding AssociatedProjects}">
+                    ItemsSource="{Binding AssociatedProjects}"
+                    Margin="0, 10">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid
-                                ColumnDefinitions="Auto, *, Auto">
+                                ColumnDefinitions="Auto, *, Auto"
+                                Margin="2, 5">
                                 <TextBlock 
                                     Text="{Binding Name}"
                                     Grid.Column="0"
-                                    FontSize="15">
+                                    FontSize="15"
+                                    VerticalAlignment="Center">
                                 </TextBlock>
                                 <StackPanel 
                                     Grid.Column="2"
                                     Orientation="Horizontal">
-                                    <TextBlock>
+                                    <TextBlock VerticalAlignment="Center">
                                         01:30h
                                     </TextBlock>
                                     <Button 
-                                        Grid.Column="0" 
-                                        x:Name="playPauseButton"
-                                        Padding="5"/>
-                                        <!--
-                                        <Button.Content>
-                                            <Canvas Width="10" Height="10">
-                                                <Polygon Points="0,0 0,10 10,5" Fill="Gray" />
-                                            </Canvas>
-                                        </Button.Content>
-                                        <Button.Content>
-                                            <Canvas Width="10" Height="10">
-                                                <Rectangle Width="3" Height="10" Fill="Gray" />
-                                                <Rectangle Width="3" Height="10" Canvas.Left="7" Fill="Gray" />
-                                            </Canvas>
-                                        </Button.Content>
-                                        -->
+                                        Margin="5, 0, 0, 0"
+                                        Padding="2">
+                                        <Button.IsVisible>
+                                            <MultiBinding Converter="{StaticResource IdToIsActiveBoolMultiValueConverter}">
+                                                <Binding Path="Id" />
+                                                <Binding Path="$parent[ItemsControl].((userHomePage:UserHomePageViewModel)DataContext).ActiveProjectId"/>
+                                            </MultiBinding>
+                                        </Button.IsVisible>
+                                        <Svg 
+                                            Path="/Assets/pause-button.svg"
+                                            Width="15"
+                                            Margin="0"/>
+                                    </Button>
+                                    <Button 
+                                        Margin="5, 0, 0, 0"
+                                        Padding="2">
+                                        <Button.IsVisible>
+                                            <MultiBinding Converter="{StaticResource IdToIsActiveBoolMultiValueConverter}" ConverterParameter="inverted">
+                                                <Binding Path="Id" />
+                                                <Binding Path="$parent[ItemsControl].((userHomePage:UserHomePageViewModel)DataContext).ActiveProjectId"/>
+                                            </MultiBinding>
+                                        </Button.IsVisible>
+                                        <Svg 
+                                            Path="/Assets/play-button.svg"
+                                            Width="15"
+                                            Margin="0"/>
+                                    </Button>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
