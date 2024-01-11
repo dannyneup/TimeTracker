@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage.Records;
-using TimeTracker.UI.Windows.Pages.ProjectOverviewPage.Records;
 using TimeTracker.UI.Windows.Shared.Models;
+using TimeTracker.UI.Windows.Shared.Models.Employee;
+using TimeTracker.UI.Windows.Shared.Models.Project;
 
 namespace TimeTracker.UI.Windows.Shared.Services;
 

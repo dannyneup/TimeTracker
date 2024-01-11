@@ -1,8 +1,6 @@
-﻿using TimeTracker.UI.Windows.Shared;
-using TimeTracker.UI.Windows.Shared.Interfaces;
-using TimeTracker.UI.Windows.Shared.Models;
+﻿using TimeTracker.UI.Windows.Shared.Interfaces;
 
-namespace TimeTracker.UI.Windows.Pages.ProjectOverviewPage.Records;
+namespace TimeTracker.UI.Windows.Shared.Models.Project;
 
 public record ProjectResponseModel(int Id, string Name, string Customer) : IResponseModel
 {

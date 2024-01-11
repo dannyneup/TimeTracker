@@ -1,4 +1,4 @@
-﻿using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage.Records;
+﻿using TimeTracker.UI.Windows.Shared.Models.Employee;
 
 namespace TimeTracker.UI.Windows.Shared.Models;
 
