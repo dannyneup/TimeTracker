@@ -6,6 +6,8 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <AssemblyName>TimeTracker.UI</AssemblyName>
+        <RootNamespace>TimeTracker.UI</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Api", "TimeTrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Api.Tests", "TimeTracker.Api.Tests\TimeTracker.Api.Tests.csproj", "{F589FAAF-2678-4953-BED7-4211EEB9B538}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.UI.Windows", "TimeTracker.UI.Windows\TimeTracker.UI.Windows.csproj", "{B126F9B6-4176-4F1C-B510-7D96BD7150C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.UI", "TimeTracker.UI\TimeTracker.UI.csproj", "{B126F9B6-4176-4F1C-B510-7D96BD7150C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
