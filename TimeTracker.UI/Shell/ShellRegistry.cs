@@ -1,6 +1,6 @@
 ﻿using Lamar;
-    
-namespace TimeTracker.UI.Windows.Shell;
+
+namespace TimeTracker.UI.Shell;
 
 public class ShellRegistry : ServiceRegistry
 {

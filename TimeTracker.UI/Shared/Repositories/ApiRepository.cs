@@ -6,11 +6,11 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using TimeTracker.UI.Windows.Shared.Interfaces;
-using TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
-using TimeTracker.UI.Windows.Shared.Services;
+using TimeTracker.UI.Shared.Interfaces;
+using TimeTracker.UI.Shared.Interfaces.Repositories;
+using TimeTracker.UI.Shared.Services;
 
-namespace TimeTracker.UI.Windows.Shared.Repositories;
+namespace TimeTracker.UI.Shared.Repositories;
 
 public class ApiRepository<TRequest, TResponse> : IRepository<TRequest, TResponse>
     where TResponse : IResponseModel, new()

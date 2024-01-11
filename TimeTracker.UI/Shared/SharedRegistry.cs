@@ -1,12 +1,12 @@
 ﻿using System;
 using Lamar;
-using TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
-using TimeTracker.UI.Windows.Shared.Models;
-using TimeTracker.UI.Windows.Shared.Repositories;
-using TimeTracker.UI.Windows.Shared.Services;
+using TimeTracker.UI.Shared.Interfaces.Repositories;
+using TimeTracker.UI.Shared.Models;
+using TimeTracker.UI.Shared.Repositories;
+using TimeTracker.UI.Shared.Services;
 using Uri = System.Uri;
 
-namespace TimeTracker.UI.Windows.Shared;
+namespace TimeTracker.UI.Shared;
 
 public class SharedRegistry : ServiceRegistry
 {

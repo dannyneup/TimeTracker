@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace TimeTracker.UI.Windows.Pages.EmployeeOverviewPage;
+namespace TimeTracker.UI.Pages.EmployeeOverviewPage;
 
 public partial class EmployeeOverviewPageView : UserControl
 {

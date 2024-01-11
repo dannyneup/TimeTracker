@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace TimeTracker.UI.Windows.View;
+namespace TimeTracker.UI.View;
 
 public partial class MainWindow : Window
 {

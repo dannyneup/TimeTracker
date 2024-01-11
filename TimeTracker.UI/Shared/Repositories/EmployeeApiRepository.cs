@@ -6,13 +6,12 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AutoMapper;
-using TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
-using TimeTracker.UI.Windows.Shared.Models.Employee;
-using TimeTracker.UI.Windows.Shared.Models.Project;
-using TimeTracker.UI.Windows.Shared.Services;
+using TimeTracker.UI.Shared.Interfaces.Repositories;
+using TimeTracker.UI.Shared.Models.Employee;
+using TimeTracker.UI.Shared.Models.Project;
+using TimeTracker.UI.Shared.Services;
 
-namespace TimeTracker.UI.Windows.Shared.Repositories;
+namespace TimeTracker.UI.Shared.Repositories;
 
 public class EmployeeApiRepository(EndpointService endpointService)
     : ApiRepository<EmployeeRequestModel, EmployeeResponseModel>(endpointService), IEmployeeRepository

@@ -1,10 +1,9 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:shell="clr-namespace:TimeTracker.UI.Windows.Shell"
-             xmlns:shared="clr-namespace:TimeTracker.UI.Windows.Shared"
-             xmlns:interfaces="clr-namespace:TimeTracker.UI.Windows.Shared.Interfaces"
-             x:Class="TimeTracker.UI.Windows.Shell.ApplicationView"
-             x:DataType="shell:ApplicationViewModel">
+             xmlns:shell1="clr-namespace:TimeTracker.UI.Shell"
+             xmlns:interfaces="clr-namespace:TimeTracker.UI.Shared.Interfaces"
+             x:Class="TimeTracker.UI.Shell.ApplicationView"
+             x:DataType="shell1:ApplicationViewModel">
     <TabControl 
         ItemsSource="{Binding Pages}"
         SelectedItem="{Binding ActivePage}">

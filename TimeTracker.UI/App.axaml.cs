@@ -1,9 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using TimeTracker.UI.Windows.Shell;
+using TimeTracker.UI.Shell;
 
-namespace TimeTracker.UI.Windows;
+
+namespace TimeTracker.UI;
 
 public class App : Application
 {

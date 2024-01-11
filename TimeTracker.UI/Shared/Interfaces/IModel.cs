@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.UI.Windows.Shared.Interfaces;
+﻿namespace TimeTracker.UI.Shared.Interfaces;
 
 public interface IModel
 {

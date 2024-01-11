@@ -1,8 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 
-namespace TimeTracker.UI.Windows.Pages.ProjectOverviewPage;
+namespace TimeTracker.UI.Pages.ProjectOverviewPage;
 
 public partial class ProjectOverviewPageView : UserControl
 {

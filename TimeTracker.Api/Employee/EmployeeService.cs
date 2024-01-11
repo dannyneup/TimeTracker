@@ -1,5 +1,4 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TimeTracker.Api.Booking.Models;
 using TimeTracker.Api.Employee.Models;
 using TimeTracker.Api.Project.Models;

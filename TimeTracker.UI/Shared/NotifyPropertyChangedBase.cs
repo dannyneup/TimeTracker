@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace TimeTracker.UI.Windows.Shared;
+namespace TimeTracker.UI.Shared;
 
 public class NotifyPropertyChangedBase : INotifyPropertyChanged
 {

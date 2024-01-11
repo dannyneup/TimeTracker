@@ -1,9 +1,9 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:userHomePage="clr-namespace:TimeTracker.UI.Windows.Pages.UserHomePage"
-             xmlns:valueConverters="clr-namespace:TimeTracker.UI.Windows.Pages.UserHomePage.ValueConverters"
-             x:DataType="userHomePage:UserHomePageViewModel"
-             x:Class="TimeTracker.UI.Windows.Pages.UserHomePage.UserHomePageView">
+             xmlns:userHomePage1="clr-namespace:TimeTracker.UI.Pages.UserHomePage"
+             xmlns:valueConverters="clr-namespace:TimeTracker.UI.Pages.UserHomePage.ValueConverters"
+             x:DataType="userHomePage1:UserHomePageViewModel"
+             x:Class="TimeTracker.UI.Pages.UserHomePage.UserHomePageView">
     <UserControl.Resources>
         <valueConverters:IdToIsActiveBoolMultiValueConverter x:Key="IdToIsActiveBoolMultiValueConverter" />
     </UserControl.Resources>
@@ -79,8 +79,7 @@
                                     Text="{Binding Name}"
                                     Grid.Column="0"
                                     FontSize="15"
-                                    VerticalAlignment="Center">
-                                </TextBlock>
+                                    VerticalAlignment="Center" />
                                 <StackPanel 
                                     Grid.Column="2"
                                     Orientation="Horizontal">
@@ -93,7 +92,7 @@
                                         <Button.IsVisible>
                                             <MultiBinding Converter="{StaticResource IdToIsActiveBoolMultiValueConverter}">
                                                 <Binding Path="Id" />
-                                                <Binding Path="$parent[ItemsControl].((userHomePage:UserHomePageViewModel)DataContext).ActiveProjectId"/>
+                                                <Binding Path="$parent[ItemsControl].((userHomePage1:UserHomePageViewModel)DataContext).ActiveProjectId"/>
                                             </MultiBinding>
                                         </Button.IsVisible>
                                         <Svg 
@@ -107,7 +106,7 @@
                                         <Button.IsVisible>
                                             <MultiBinding Converter="{StaticResource IdToIsActiveBoolMultiValueConverter}" ConverterParameter="inverted">
                                                 <Binding Path="Id" />
-                                                <Binding Path="$parent[ItemsControl].((userHomePage:UserHomePageViewModel)DataContext).ActiveProjectId"/>
+                                                <Binding Path="$parent[ItemsControl].((userHomePage1:UserHomePageViewModel)DataContext).ActiveProjectId"/>
                                             </MultiBinding>
                                         </Button.IsVisible>
                                         <Svg 
@@ -124,9 +123,7 @@
         </Border>
         
         <StackPanel 
-            Grid.Column="1">
-            
-        </StackPanel>
+            Grid.Column="1" />
     </Grid>
     
 </UserControl>

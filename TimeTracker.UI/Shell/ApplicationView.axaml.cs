@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace TimeTracker.UI.Windows.Shell;
+namespace TimeTracker.UI.Shell;
 
 public partial class ApplicationView : UserControl
 {

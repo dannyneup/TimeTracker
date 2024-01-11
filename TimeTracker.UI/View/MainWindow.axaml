@@ -1,8 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:shell="clr-namespace:TimeTracker.UI.Windows.Shell"
-        x:Class="TimeTracker.UI.Windows.View.MainWindow"
-        x:DataType="shell:ApplicationViewModel"
+        xmlns:shell1="clr-namespace:TimeTracker.UI.Shell"
+        x:Class="TimeTracker.UI.View.MainWindow"
+        x:DataType="shell1:ApplicationViewModel"
         Content="{Binding}"
         Title="TimeTracker" />
     

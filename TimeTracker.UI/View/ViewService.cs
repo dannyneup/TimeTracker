@@ -1,8 +1,8 @@
 ﻿using Avalonia.Controls.ApplicationLifetimes;
-using TimeTracker.UI.Windows.Shared;
-using TimeTracker.UI.Windows.Shared.Interfaces;
+using TimeTracker.UI.Shared;
+using TimeTracker.UI.Shared.Interfaces;
 
-namespace TimeTracker.UI.Windows.View;
+namespace TimeTracker.UI.View;
 
 public sealed class ViewService : IViewService
 {

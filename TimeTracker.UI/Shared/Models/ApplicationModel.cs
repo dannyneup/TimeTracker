@@ -1,6 +1,6 @@
-﻿using TimeTracker.UI.Windows.Shared.Models.Employee;
+﻿using TimeTracker.UI.Shared.Models.Employee;
 
-namespace TimeTracker.UI.Windows.Shared.Models;
+namespace TimeTracker.UI.Shared.Models;
 
 public class ApplicationModel
 {

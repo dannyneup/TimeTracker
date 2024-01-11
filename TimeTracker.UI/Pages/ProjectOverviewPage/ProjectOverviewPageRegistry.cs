@@ -1,6 +1,6 @@
 ﻿using Lamar;
 
-namespace TimeTracker.UI.Windows.Pages.ProjectOverviewPage;
+namespace TimeTracker.UI.Pages.ProjectOverviewPage;
 
 public class ProjectOverviewPageRegistry : ServiceRegistry
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using TimeTracker.UI.Windows.Shared.Models;
-using TimeTracker.UI.Windows.Shared.Models.Employee;
-using TimeTracker.UI.Windows.Shared.Models.Project;
+using TimeTracker.UI.Shared.Models;
+using TimeTracker.UI.Shared.Models.Employee;
+using TimeTracker.UI.Shared.Models.Project;
 
-namespace TimeTracker.UI.Windows.Shared.Services;
+namespace TimeTracker.UI.Shared.Services;
 
 public class EndpointService
 {

@@ -1,13 +1,13 @@
 ﻿using Avalonia.Controls.ApplicationLifetimes;
 using Lamar;
-using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage;
-using TimeTracker.UI.Windows.Pages.ProjectOverviewPage;
-using TimeTracker.UI.Windows.Pages.UserHomePage;
-using TimeTracker.UI.Windows.Shared;
-using TimeTracker.UI.Windows.Shell;
-using TimeTracker.UI.Windows.View;
+using TimeTracker.UI.Pages.EmployeeOverviewPage;
+using TimeTracker.UI.Pages.ProjectOverviewPage;
+using TimeTracker.UI.Pages.UserHomePage;
+using TimeTracker.UI.Shared;
+using TimeTracker.UI.Shell;
+using TimeTracker.UI.View;
 
-namespace TimeTracker.UI.Windows;
+namespace TimeTracker.UI;
 
 public static class Bootstrapper
 {

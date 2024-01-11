@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using ReactiveUI;
-using TimeTracker.UI.Windows.Pages.EmployeeOverviewPage;
-using TimeTracker.UI.Windows.Pages.ProjectOverviewPage;
-using TimeTracker.UI.Windows.Pages.UserHomePage;
-using TimeTracker.UI.Windows.Shared;
-using TimeTracker.UI.Windows.Shared.Interfaces;
-using TimeTracker.UI.Windows.Shared.Models;
+﻿using System.Threading.Tasks;
+using TimeTracker.UI.Pages.EmployeeOverviewPage;
+using TimeTracker.UI.Pages.ProjectOverviewPage;
+using TimeTracker.UI.Pages.UserHomePage;
+using TimeTracker.UI.Shared;
+using TimeTracker.UI.Shared.Interfaces;
 
-namespace TimeTracker.UI.Windows.Shell;
+namespace TimeTracker.UI.Shell;
 
 public sealed class ApplicationViewModel : NotifyPropertyChangedBase
 {

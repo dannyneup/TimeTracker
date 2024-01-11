@@ -1,8 +1,8 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:employeeOverviewPage="clr-namespace:TimeTracker.UI.Windows.Pages.ProjectOverviewPage"
-             x:DataType="employeeOverviewPage:ProjectOverviewPageViewModel"
-             x:Class="TimeTracker.UI.Windows.Pages.ProjectOverviewPage.ProjectOverviewPageView">
+             xmlns:projectOverviewPage="clr-namespace:TimeTracker.UI.Pages.ProjectOverviewPage"
+             x:DataType="projectOverviewPage:ProjectOverviewPageViewModel"
+             x:Class="TimeTracker.UI.Pages.ProjectOverviewPage.ProjectOverviewPageView">
     
     <DataGrid
         ItemsSource="{Binding Projects}"

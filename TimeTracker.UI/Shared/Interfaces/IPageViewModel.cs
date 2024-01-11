@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace TimeTracker.UI.Windows.Shared.Interfaces;
+namespace TimeTracker.UI.Shared.Interfaces;
 
 public interface IPageViewModel
 {

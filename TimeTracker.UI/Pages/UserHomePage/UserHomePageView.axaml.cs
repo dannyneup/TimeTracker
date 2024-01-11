@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace TimeTracker.UI.Windows.Pages.UserHomePage;
+namespace TimeTracker.UI.Pages.UserHomePage;
 
 public partial class UserHomePageView : UserControl
 {

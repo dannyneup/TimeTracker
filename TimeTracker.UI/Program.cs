@@ -1,8 +1,8 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.ReactiveUI;
-using System;
 
-namespace TimeTracker.UI.Windows;
+namespace TimeTracker.UI;
 
 sealed class Program
 {

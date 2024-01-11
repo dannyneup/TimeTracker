@@ -5,7 +5,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Data.Converters;
 
-namespace TimeTracker.UI.Windows.Pages.UserHomePage.ValueConverters;
+namespace TimeTracker.UI.Pages.UserHomePage.ValueConverters;
 
 public class IdToIsActiveBoolMultiValueConverter : IMultiValueConverter
 {

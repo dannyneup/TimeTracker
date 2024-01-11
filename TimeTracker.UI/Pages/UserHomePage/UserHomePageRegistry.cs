@@ -1,6 +1,6 @@
 ﻿using Lamar;
 
-namespace TimeTracker.UI.Windows.Pages.UserHomePage;
+namespace TimeTracker.UI.Pages.UserHomePage;
 
 public class UserHomePageRegistry : ServiceRegistry
 {

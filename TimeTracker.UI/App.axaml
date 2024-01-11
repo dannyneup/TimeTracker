@@ -1,7 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="TimeTracker.UI.Windows.App"
-             xmlns:local="using:TimeTracker.UI.Windows"
+             x:Class="TimeTracker.UI.App"
+             xmlns:local="using:TimeTracker.UI"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 

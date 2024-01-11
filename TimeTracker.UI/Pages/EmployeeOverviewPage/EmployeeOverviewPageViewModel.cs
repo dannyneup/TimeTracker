@@ -1,12 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using TimeTracker.UI.Windows.Shared;
-using TimeTracker.UI.Windows.Shared.Interfaces;
-using TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
-using TimeTracker.UI.Windows.Shared.Models.Employee;
+using TimeTracker.UI.Shared;
+using TimeTracker.UI.Shared.Interfaces;
+using TimeTracker.UI.Shared.Interfaces.Repositories;
+using TimeTracker.UI.Shared.Models.Employee;
 
-namespace TimeTracker.UI.Windows.Pages.EmployeeOverviewPage;
+namespace TimeTracker.UI.Pages.EmployeeOverviewPage;
 
 public sealed class EmployeeOverviewPageViewModel : NotifyPropertyChangedBase, IPageViewModel
 {

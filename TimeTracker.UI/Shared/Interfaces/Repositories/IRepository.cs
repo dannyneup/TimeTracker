@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace TimeTracker.UI.Windows.Shared.Interfaces.Repositories;
+namespace TimeTracker.UI.Shared.Interfaces.Repositories;
 
 public interface IRepository<TRequest, TResponse>
 {

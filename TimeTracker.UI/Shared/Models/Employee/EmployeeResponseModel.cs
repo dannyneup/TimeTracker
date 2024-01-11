@@ -1,6 +1,6 @@
-﻿using TimeTracker.UI.Windows.Shared.Interfaces;
+﻿using TimeTracker.UI.Shared.Interfaces;
 
-namespace TimeTracker.UI.Windows.Shared.Models.Employee;
+namespace TimeTracker.UI.Shared.Models.Employee;
 
 public record EmployeeResponseModel(int Id, string LastName, string FirstName, string EmailAddress) : IResponseModel
 {

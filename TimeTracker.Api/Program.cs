@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using TimeTracker.Api.Booking;
 using TimeTracker.Api.Booking.Models;
 using TimeTracker.Api.Context;
 using TimeTracker.Api.Employee;

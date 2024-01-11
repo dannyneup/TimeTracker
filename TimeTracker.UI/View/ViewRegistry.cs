@@ -1,9 +1,8 @@
 ﻿using Avalonia.Controls.ApplicationLifetimes;
 using Lamar;
-using TimeTracker.UI.Windows.Shared;
-using TimeTracker.UI.Windows.Shared.Interfaces;
+using TimeTracker.UI.Shared.Interfaces;
 
-namespace TimeTracker.UI.Windows.View;
+namespace TimeTracker.UI.View;
 
 public class ViewRegistry : ServiceRegistry
 {
