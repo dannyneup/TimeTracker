@@ -31,4 +31,24 @@ public class EmployeeApiRepository(EndpointService endpointService)
             return (Enumerable.Empty<ProjectResponseModel>(), false);
         }
     }
+
+    public Task<(TimeSpan, bool)> GetTotalWorkingHoursAsync(int employeeId, DateTimeOffset start, DateTimeOffset end)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<(TimeSpan, bool)> GetTodaysTotalWorkingHoursAsync(int employeeId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<(IDictionary<int, TimeSpan>, bool)> GetProjectWorkingHoursAsync(int employeeId, DateTimeOffset start, DateTimeOffset end)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<(IDictionary<int, TimeSpan>, bool)> GetTodaysProjectWorkingHoursAsync(int employeeId)
+    {
+        throw new NotImplementedException();
+    }
 }
